@@ -1,0 +1,2163 @@
+<!doctype html>
+<html lang="en">
+
+	<head>
+		<meta charset="utf-8">
+
+		<title>Automating Peace of Mind with Accessibility Testing and CI - Marcy Sutton</title>
+
+		<meta name="description" content="A presentation on accessibility testing in Angular 1 and Angular 2">
+		<meta name="author" content="Marcy Sutton">
+
+		<meta name="apple-mobile-web-app-capable" content="yes">
+		<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
+
+		<link rel="stylesheet" href="css/reveal.css">
+
+		<link rel="stylesheet" href="plugin/accessibility-helpers/accessibility-helper.css">
+		<link rel="stylesheet" href="css/theme/custom.css" id="theme">
+
+		<!-- Code syntax highlighting -->
+		<link rel="stylesheet" href="lib/css/tomorrow.css">
+
+		<!-- Printing and PDF exports -->
+		<script>
+			var link = document.createElement( 'link' );
+			link.rel = 'stylesheet';
+			link.type = 'text/css';
+			link.href = window.location.search.match( /print-pdf/gi ) ? 'css/print/pdf.css' : 'css/print/paper.css';
+			document.getElementsByTagName( 'head' )[0].appendChild( link );
+		</script>
+
+		<!--[if lt IE 9]>
+		<script src="lib/js/html5shiv.js"></script>
+		<![endif]-->
+	</head>
+
+	<body>
+		<div class="reveal">
+			<div class="slides">
+				<section data-state="deque-title-slide" class="title-slide">
+					<div class="left">
+						<img src="img/deque-logo.png" alt="Deque" class="plain deque">
+					</div>
+					<div class="right">
+						<h1><span class="subhead">Automating peace of mind<br><span aria-hidden="true">with ~</span></span> Accessibility Testing &amp;<br> Continuous Integration</h1>
+						<p>
+							By <a href="http://marcysutton.com">Marcy Sutton</a> / <a href="http://twitter.com/marcysutton">@MarcySutton</a><br>
+							Senior Front-End Engineer, Deque Systems
+						</p>
+						<div class="hr inset" style="margin: 0" aria-hidden="true"><hr></div>
+						<small>Slides: <a href="http://bit.ly/a11y-and-ci">http://bit.ly/a11y-and-ci</a></small>
+					</div>
+				</section>
+
+				<section data-state="has-footer">
+					<h2>Who is Marcy Sutton?</h2>
+					<div id="oh-hai-images" class="border-top">
+						<div>
+							<img data-src="img/axe-core.png" alt="axe-core" class="axe plain">
+						</div>
+						<img data-src="img/egghead-dot-io-logo.png" alt="Egghead.io" class="egghead plain">
+						<img data-src="img/gdi_logo_badge.png" alt="Girl Develop It" class="gdi plain">
+						<img data-src="img/angularjs-logo.png" alt="Angular" class="gdi plain">
+					</div>
+				</section>
+
+				<section data-background-color="#333" data-background-image="img/office-duo.jpg">
+					<h2 class="offscreen">Nightmare Scenario</h2>
+				</section>
+
+				<section>
+					<div class="left-align">
+						<p class="subhead larger">What if:</p>
+						<h2 class="h1-style fancy" style="margin-top:0">
+							You just shipped a redesign making your website unusable to 15% of users 😮
+						</h2>
+					</div>
+					<aside class="notes">
+						That's more users than some older browsers, like IE10!
+					</aside>
+				</section>
+
+				<section>
+					<h2 class="h1-style fancy">Web Accessibility</h2>
+					<figure>
+						<blockquote>
+						 People with disabilities can perceive, understand, navigate, and interact with the Web, and that they can contribute to the Web.
+						</blockquote>
+						<figcaption><a href="https://www.w3.org/WAI/intro/accessibility.php">https://www.w3.org/WAI/intro/accessibility.php</a></figcaption>
+					</figure>
+				</section>
+
+				<section>
+					<h2 class="h1-style fancy">One bad deployment away</h2>
+					<img data-src="img/merging.gif" alt="How not to merge" style="min-width: 600px;">
+				</section>
+
+				<section>
+					<h2 class="h1-style fancy">Software Testing<br>
+						<span class="subhead">a winning strategy for web a11y</span>
+					</h2>
+					<figure>
+						<img data-src="img/meta-coffeetables.jpg" alt="Kramer's coffee table book on coffee tables">
+						<figcaption><em>It's meta!</em></figcaption>
+					</figure>
+				</section>
+
+				<section>
+					<h2 class="h1-style fancy">Today</h2>
+					<ul class="larger">
+						<li class="fragment">Software quality</li>
+						<li class="fragment">Continuous integration</li>
+						<li class="fragment">Automating accessibility</li>
+						<li class="fragment">Using technology for good</li>
+					</ul>
+				</section>
+
+				<section>
+					<h2 class="fancy">Validating Code &amp; Covering Your Six</h2>
+					<div class="hr inset"><hr></div>
+					<div class="list-rows">
+						<h3 class="h4-style">Functional Testing</h3>
+						<ul>
+							<li>Unit Testing</li>
+							<li>Integration Testing</li>
+							<li>System testing</li>
+							<li>Acceptance Testing</li>
+						</ul>
+						<div class="fragment">
+							<h3 class="h4-style">Non-Functional Testing</h3>
+							<ul>
+								<li>Performance Testing</li>
+								<li>Security Testing</li>
+								<li>Usability Testing</li>
+								<li>Compatibility Testing</li>
+							</ul>
+						</div>
+					</div>
+				</section>
+
+				<section>
+					<div class="headline-colorBlock">
+						<h2 class="fancy">Accessibility Testing</h2>
+						<h3>a.k.a. cool stuff 🆒😎</h3>
+						<div class="list-siblings colorBlock">
+							<div>
+								<h3>Automated</h3>
+								<ul>
+									<li>HTML/ARIA validation</li>
+									<li>Form labels</li>
+									<li>Color contrast</li>
+									<li>Accessible names</li>
+									<li>Focus management</li>
+									<li>Specifying a language</li>
+								</ul>
+								<p><a href="https://github.com/dequelabs/axe-core">And more...</a></p>
+							</div>
+							<div class="fragment">
+								<h3>Manual</h3>
+								<ul>
+									<li>Focus order</li>
+									<li>Text alternative quality</li>
+									<li>Screen reader testing</li>
+									<li>Keyboard support</li>
+									<li>Contrast over images/gradients</li>
+									<li>Error identification</li>
+								</ul>
+								<p><a href="https://www.deque.com/blog/manual-accessibility-testing-approach/">Source</a></p>
+							</div>
+						</div>
+					</div>
+					<aside class="notes">We can automate 25-35% of accessibility tests depending on the ruleset.
+
+					Manual testing also helps for usability.</aside>
+				</section>
+
+				<section>
+					<h2 class="h1-style fancy">Web Accessibility Basics!</h2>
+					<p><a href="http://webaim.org/intro/#people">http://webaim.org/intro/#people</a></p>
+					<ul class="larger">
+						<li>Visual</li>
+						<li>Hearing</li>
+						<li>Motor</li>
+						<li>Cognitive</li>
+					</ul>
+				</section>
+
+				<section>
+					<h2 class="h1-style fancy">Users Need:</h2>
+					<ul>
+						<li>Text alternatives</li>
+						<li>Keyboard support</li>
+						<li>Color contrast</li>
+						<li>Semantic structure</li>
+						<li>Accessible forms</li>
+						<li>&hellip;and more!</li>
+					</ul>
+					<p><a href="https://marcysutton.com/web-accessibility-resources/">https://marcysutton.com/web-accessibility-resources/</a></p>
+				</section>
+
+				<section>
+					<h2 class="h1-style fancy">Why geek out over this?</h2>
+					<img data-src="img/dancing.gif" alt="Dancing in an elevator" style="min-width: 600px;">
+				</section>
+
+				<section>
+					<div class="left-align snug">
+						<h2><em>What can we automate?</em></h2>
+						<!-- find a more compelling way to talk about what we can automate -->
+						<h3 class="fancy h1-style" style="margin-bottom: 0.75em;">Tests can catch roughly 30-50% of a11y issues, depending on the rule set.</h3>
+					<p class="fragment">Related: <a href="https://auto-wcag.github.io/auto-wcag/">Auto-WCAG Community Group</a> &amp; <a href="https://www.w3.org/WAI/GL/task-forces/conformance-testing/work-statement">Accessibility Conformance Testing (ACT) Task Force</a> at W3C</p>
+					</div>
+				</section>
+
+				<section>
+					<div class="left-align full-width">
+						<h2 class="h1-style fancy">
+							<span class="subhead smaller muted">~ But ~</span>
+							Automated testing is no substitute for manual tests &amp; real user feedback.</h2>
+					</div>
+					<aside class="notes">
+					Because of the differences in screen readers vs. browser tools / best practices
+					</aside>
+				</section>
+
+				<section>
+					<h2 class="h1-style fancy" style="margin-top:-50px;">Accessibility Unit Tests</h2>
+					<div class="fragment">
+						<h3 class="muted">Good for:</h3>
+						<ul class="larger">
+							<li>Component-specific behavior</li>
+							<li>Interaction/focus APIs</li>
+							<li>Text alternatives</li>
+							<li>ARIA states</li>
+						</ul>
+					</div>
+					<aside class="notes">
+					Escape key, tabbing, hitting Enter/Space, Arrow keys
+					offscreen/attribute text computation (stuff you don't see)
+					ARIA default values for custom elements
+
+					PhantomJS vs. Karma, etc.
+					</aside>
+				</section>
+
+				<section>
+					<div class="left-align">
+						<h2 class="h1-style fancy">Unit Test Example</h2>
+					</div>
+					<figure class="code">
+						<figcaption style="padding-left: 2.2em">
+							<a href="https://github.com/davidtheclark/react-aria-menubutton">https://github.com/davidtheclark/react-aria-menubutton</a>
+						</figcaption>
+						<pre><code class="javascript">
+  it('Manager#openMenu focusing in menu', function() {
+    var manager = createManagerWithMockedElements();
+    manager.openMenu({ focusMenu: true });
+    expect(manager.isOpen).toBe(true);
+    expect(manager.menu.setState).toHaveBeenCalledTimes(1);
+    expect(manager.menu.setState.mock.calls[0]).toEqual([{ isOpen: true }]);
+    expect(manager.button.setState).toHaveBeenCalledTimes(1);
+    expect(manager.button.setState.mock.calls[0]).toEqual([{ menuOpen: true }]);
+
+    return new Promise(function(resolve) {
+      setTimeout(function() {
+        expect(manager.focusItem).toHaveBeenCalledTimes(1);
+        expect(manager.focusItem.mock.calls[0]).toEqual([0]);
+        resolve();
+      }, 0);
+    });
+  });
+						</code></pre>
+					</figure>
+				</section>
+
+				<section>
+					<h2 class="h1-style fancy" style="margin-top:-50px;">Integration/E2E Tests</h2>
+					<div class="fragment">
+						<h3 class="muted">Good for:</h3>
+						<ul class="larger">
+							<li>Real-world browser testing</li>
+							<li>Document/page-level rules</li>
+							<li>Widget interrop</li>
+							<li>Color contrast</li>
+							<li>Framework testing options</li>
+						</ul>
+					</div>
+					<aside class="notes">
+					Escape key, tabbing, hitting Enter/Space, Arrow keys
+					offscreen/attribute text computation (stuff you don't see)
+					ARIA default values for custom elements
+
+					Selenium Webdriver!
+					</aside>
+				</section>
+
+				<section style="padding-top: 0;">
+					<h2 class="fancy" style="text-align: left;margin-left:20px;">End-to-End test example</h2>
+					<figure class="code">
+						<figcaption><a href="https://github.com/angular/material2/blob/master/e2e/components/dialog/dialog.e2e.ts" target="_blank" title="Link opens in a new window">Angular Material 2 Dialog</a></figcaption>
+						<pre><code class="javascript">
+import {browser, by, element, Key} from 'protractor';
+import {expectToExist, expectFocusOn} from '../../util/asserts';
+import {pressKeys, clickElementAtPoint} from '../../util/actions';
+import {waitForElement} from '../../util/query';
+
+describe('dialog', () => {
+  beforeEach(() => browser.get('/dialog'));
+
+  it('should open a dialog', () => {
+    element(by.id('default')).click();
+    expectToExist('md-dialog-container');
+  });
+
+  it('should close by clicking on the backdrop', () => {
+    element(by.id('default')).click();
+
+    waitForDialog().then(() => {
+      clickOnBackrop();
+      expectToExist('md-dialog-container', false);
+    });
+  });
+
+  it('should close by pressing escape', () => {
+    element(by.id('default')).click();
+
+    waitForDialog().then(() => {
+      pressKeys(Key.ESCAPE);
+      expectToExist('md-dialog-container', false);
+    });
+  });
+
+  it('should close by pressing escape when the first tabbable element has lost focus', () => {
+    element(by.id('default')).click();
+
+    waitForDialog().then(() => {
+      clickElementAtPoint('md-dialog-container', { x: 0, y: 0 });
+      pressKeys(Key.ESCAPE);
+      expectToExist('md-dialog-container', false);
+    });
+  });
+
+  it('should close by clicking on the "close" button', () => {
+    element(by.id('default')).click();
+
+    waitForDialog().then(() => {
+      element(by.id('close')).click();
+      expectToExist('md-dialog-container', false);
+    });
+  });
+
+  it('should focus the first focusable element', () => {
+    element(by.id('default')).click();
+
+    waitForDialog().then(() => {
+      expectFocusOn('md-dialog-container input');
+    });
+  });
+
+  it('should restore focus to the element that opened the dialog', () => {
+    let openButton = element(by.id('default'));
+
+    openButton.click();
+
+    waitForDialog().then(() => {
+      clickOnBackrop();
+      expectFocusOn(openButton);
+    });
+  });
+
+  it('should prevent tabbing out of the dialog', () => {
+    element(by.id('default')).click();
+
+    waitForDialog().then(() => {
+      let tab = Key.TAB;
+
+      pressKeys(tab, tab, tab);
+      expectFocusOn('#close');
+    });
+  });
+
+  it('should be able to prevent closing by clicking on the backdrop', () => {
+    element(by.id('disabled')).click();
+
+    waitForDialog().then(() => {
+      clickOnBackrop();
+      expectToExist('md-dialog-container');
+    });
+  });
+
+  it('should be able to prevent closing by pressing escape', () => {
+    element(by.id('disabled')).click();
+
+    waitForDialog().then(() => {
+      pressKeys(Key.ESCAPE);
+      expectToExist('md-dialog-container');
+    });
+  });
+
+  function waitForDialog() {
+    return waitForElement('md-dialog-container');
+  }
+
+  function clickOnBackrop() {
+    clickElementAtPoint('.cdk-overlay-backdrop', { x: 0, y: 0 });
+  }
+});
+						</code></pre>
+					</figure>
+				</section>
+
+				<section>
+					<iframe data-src="testing-tweet1.html" title="Testing tweet from Sarah Drasner" style="min-width: 510px;min-height: 670px"></iframe>
+				</section>
+
+				<section>
+					<iframe data-src="testing-tweet2.html" title="Testing tweet from Nick Vasilyev" style="min-width: 510px;min-height: 670px"></iframe>
+				</section>
+
+				<section>
+					<div class="left-align">
+						<h2 class="h1-style fancy">Write a combination <br>
+						of tests to catch a variety<br> of bugs 💻🔎🐛</h2>
+					</div>
+				</section>
+
+				<section>
+					<h2 class="h1-style fancy">Get help with an<br> Accessibility Testing API</h2>
+					<div>
+						<h3 class="muted">Save yourself from:</h3>
+						<ul>
+							<li>Label/name computation</li>
+							<li>Incorrect ARIA usage</li>
+							<li>Color contrast</li>
+							<li>Data table markup</li>
+							<li>Viewport/zooming probz</li>
+						</ul>
+					</div>
+					<aside class="notes">
+					Escape key, tabbing, hitting Enter/Space, Arrow keys
+					offscreen/attribute text computation (stuff you don't see)
+					ARIA default values for custom elements
+					</aside>
+				</section>
+
+				<section>
+					<h2 style="margin-bottom: 0.25em">aXe-core Accessibility Testing Engine</h2>
+					<p style="margin:0;"><a href="https://www.npmjs.com/package/axe-core">https://www.npmjs.com/package/axe-core</a></p>
+					<figure>
+						<a href="https://www.npmjs.com/package/axe-core">
+							<img data-src="img/axe-core-npm.png" alt="axe-core on npm" style="max-width: 85%;">
+						</a>
+					</figure>
+				</section>
+
+				<section>
+					<h2 class="h1-style">What is <img src="img/axe-core.png" class="plain" alt="axe-core" style="margin:0 0 -18px; max-height: 90px;">?</h2>
+					<p><a href="https://github.com/dequelabs/axe-core">https://github.com/dequelabs/axe-core</a></p>
+					<ul>
+						<li>Open-source JS library</li>
+						<li>No network or API key required</li>
+						<li>Configurable rules &amp; checks</li>
+						<li>No false positives</li>
+						<li>Based on standards</li>
+					</ul>
+				</section>
+
+				<section>
+					<div class="left-align snug">
+						<h2 class="h1-style fancy">Unit test with axe-core</h2>
+						<h3>Expect no violations in the aXe <code>results</code> object</h3>
+					</div>
+					<figure class="code">
+						<figcaption style="padding-left: 2.2em;"><a href="https://axe-core.org/docs/">https://axe-core.org/docs/</a></figcaption>
+						<pre><code class="javascript">
+  var axe = require('axe-core');
+
+  describe('Custom component', function() {
+    it('should have no a11y violations', function(done) {
+      let options = {};
+
+      axe.run('.some-element-selector', options, function (error, results) {
+        expect(result.violations.length).toBe(0);
+        done();
+      });
+    });
+  });
+						</code></pre>
+					</figure>
+				</section>
+
+				<section>
+					<div class="left-align snug">
+						<h2 class="fancy h1-style">Integration testing with aXe-webdriverjs</h2>
+					</div>
+					<figure class="code">
+						<figcaption style="padding-left: 2.2em;"><a href="https://github.com/marcysutton/axe-webdriverjs-demo">https://github.com/marcysutton/axe-webdriverjs-demo</a></figcaption>
+				    <pre><code class="javascript">  var AxeBuilder = require('axe-webdriverjs'),
+      WebDriver = require('selenium-webdriver');
+ 
+  var driver = new WebDriver.Builder()
+    .forBrowser('chrome').build();
+ 
+  driver
+    .get('https://localhost:4000')
+    .then(function (done) {
+      AxeBuilder(driver)
+        .analyze(function (results) {
+          expect(results.violations.length).toBe(0);
+          done();
+        });
+    });
+
+						</code></pre>
+					</figure>
+				</section>
+
+				<section>
+					<h2 class="h1-style fancy">Running tests locally</h2>
+					<iframe src="http://127.0.0.1:3000/" width="1152" height="600" title="Command-line prompt">Feature only available in live demo</iframe>
+					<aside class="notes">
+					<h2>Demo: Test Suite running in Travis/Circle, including a11y tests</h2></aside>
+				</section>
+
+				<section>
+					<div class="left-align">
+						<h2 class="fancy">aXe-core JSON Output</h2>
+					</div>
+					<figure class="code">
+					<figcaption style="padding-left: 2.2em"><a href="https://github.com/dequelabs/axe-core/blob/develop/doc/API.md">https://github.com/dequelabs/axe-core/blob/develop/doc/API.md</a></figcaption>
+					<pre><code class="javascript">
+  Accessibility Violations:  10
+[ { description: 'Ensures buttons have discernible text',
+    help: 'Buttons must have discernible text',
+    helpUrl: 'https://dequeuniversity.com/rules/axe/2.2/button-name?application=webdriverjs',
+    id: 'button-name',
+    impact: 'critical',
+    nodes:
+     [ { all: [ [length]: 0 ],
+         any:
+          [ { data: null,
+              id: 'non-empty-if-present',
+              impact: 'critical',
+              message: 'Element has a value attribute and the value attribute is empty',
+              relatedNodes: [ [length]: 0 ] },
+            { data: null,
+              id: 'non-empty-value',
+              impact: 'critical',
+              message: 'Element has no value attribute or the value attribute is empty',
+              relatedNodes: [ [length]: 0 ] },
+            { data: '',
+              id: 'button-has-visible-text',
+              impact: 'critical',
+              message: 'Element does not have inner text that is visible to screen readers',
+              relatedNodes: [ [length]: 0 ] },
+            { data: null,
+              id: 'aria-label',
+              impact: 'critical',
+              message: 'aria-label attribute does not exist or is empty',
+              relatedNodes: [ [length]: 0 ] },
+            { data: null,
+              id: 'aria-labelledby',
+              impact: 'critical',
+              message: 'aria-labelledby attribute does not exist, references elements that do not exist or references elements that are empty or not visible',
+              relatedNodes: [ [length]: 0 ] },
+            { data: null,
+              id: 'role-presentation',
+              impact: 'moderate',
+              message: 'Element\'s default semantics were not overridden with role="presentation"',
+              relatedNodes: [ [length]: 0 ] },
+            { data: null,
+              id: 'role-none',
+              impact: 'moderate',
+              message: 'Element\'s default semantics were not overridden with role="none"',
+              relatedNodes: [ [length]: 0 ] },
+            [length]: 7 ],
+         html: '&lt;button class="ui-datepicker-trigger" type="button">\n\t\t\t\t\t\t  <!-- <img title="..." alt="..." src="/redesign/assets/demo-sites/mars/images/calendar.png"> -->\n\t\t\t\t\t\t&lt;/button>',
+         impact: 'critical',
+         none:
+          [ { data: null,
+              id: 'focusable-no-name',
+              impact: 'serious',
+              message: 'Element is in tab order and does not have accessible text',
+              relatedNodes: [ [length]: 0 ] },
+            [length]: 1 ],
+         target:
+          [ '#route0 > .wrapper.departure-date > button:nth-of-type(2)',
+            [length]: 1 ] },
+       [length]: 1 ],
+    tags:
+     [ 'cat.name-role-value',
+       'wcag2a',
+       'wcag412',
+       'section508',
+       'section508.22.a',
+       [length]: 5 ] },
+  { description: 'Ensures the contrast between foreground and background colors meets WCAG 2 AA contrast ratio thresholds',
+    help: 'Elements must have sufficient color contrast',
+    helpUrl: 'https://dequeuniversity.com/rules/axe/2.2/color-contrast?application=webdriverjs',
+    id: 'color-contrast',
+    impact: 'critical',
+    nodes:
+     [ { all: [ [length]: 0 ],
+         any:
+          [ { data:
+               { bgColor: '#344b6e',
+                 contrastRatio: 4.49,
+                 fgColor: '#acbad0',
+                 fontSize: '12.0pt',
+                 fontWeight: 'normal',
+                 missingData: [ [length]: 0 ] },
+              id: 'color-contrast',
+              impact: 'critical',
+              message: 'Element has insufficient color contrast of 4.49 (foreground color: #acbad0, background color: #344b6e, font size: 12.0pt, font weight: normal)',
+              relatedNodes:
+               [ { html: '&lt;body class="public-en" data-twttr-rendered="true">',
+                   target:
+                    [ '.js.no-flexbox.flexbox-legacy.canvas.canvastext.webgl.no-touch.geolocation.postmessage.websqldatabase.indexeddb.hashchange.history.draganddrop.websockets.rgba.hsla.multiplebgs.backgroundsize.borderimage.borderradius.boxshadow.textshadow.opacity.cssanimations.csscolumns.cssgradients.cssreflections.csstransforms.csstransforms3d.csstransitions.fontface.generatedcontent.video.audio.localstorage.sessionstorage.webworkers.applicationcache.svg.inlinesvg.smil.svgclippaths.js.no-flexbox.flexbox-legacy.canvas.canvastext.webgl.no-touch.geolocation.postmessage.websqldatabase.indexeddb.hashchange.history.draganddrop.websockets.rgba.hsla.multiplebgs.backgroundsize.borderimage.borderradius.boxshadow.textshadow.opacity.cssanimations.csscolumns.cssgradients.cssreflections.csstransforms.csstransforms3d.csstransitions.fontface.generatedcontent.video.audio.localstorage.sessionstorage.webworkers.applicationcache.svg.inlinesvg.smil.svgclippaths.deque-axe-is-ready > .public-en',
+                      [length]: 1 ] },
+                 [length]: 1 ] },
+            [length]: 1 ],
+         html: '<h2 style="color:#acbad0;">A trip to Mars starts in your imagination. Are you bold enough, brave enough, <strong>crazy enough?</strong> We are. You belong on Mars with crazies like us. Most of us don\'t bite. Much.</h2>',
+         impact: 'critical',
+         none: [ [length]: 0 ],
+         target: [ '#left-column > div:nth-of-type(1) > h2', [length]: 1 ] },
+       { all: [ [length]: 0 ],
+         any:
+          [ { data:
+               { bgColor: '#344b6e',
+                 contrastRatio: 4.31,
+                 fgColor: '#ff9999',
+                 fontSize: '13.5pt',
+                 fontWeight: 'normal',
+                 missingData: [ [length]: 0 ] },
+              id: 'color-contrast',
+              impact: 'critical',
+              message: 'Element has insufficient color contrast of 4.31 (foreground color: #ff9999, background color: #344b6e, font size: 13.5pt, font weight: normal)',
+              relatedNodes:
+               [ { html: '&lt;body class="public-en" data-twttr-rendered="true">',
+                   target:
+                    [ '.js.no-flexbox.flexbox-legacy.canvas.canvastext.webgl.no-touch.geolocation.postmessage.websqldatabase.indexeddb.hashchange.history.draganddrop.websockets.rgba.hsla.multiplebgs.backgroundsize.borderimage.borderradius.boxshadow.textshadow.opacity.cssanimations.csscolumns.cssgradients.cssreflections.csstransforms.csstransforms3d.csstransitions.fontface.generatedcontent.video.audio.localstorage.sessionstorage.webworkers.applicationcache.svg.inlinesvg.smil.svgclippaths.js.no-flexbox.flexbox-legacy.canvas.canvastext.webgl.no-touch.geolocation.postmessage.websqldatabase.indexeddb.hashchange.history.draganddrop.websockets.rgba.hsla.multiplebgs.backgroundsize.borderimage.borderradius.boxshadow.textshadow.opacity.cssanimations.csscolumns.cssgradients.cssreflections.csstransforms.csstransforms3d.csstransitions.fontface.generatedcontent.video.audio.localstorage.sessionstorage.webworkers.applicationcache.svg.inlinesvg.smil.svgclippaths.deque-axe-is-ready > .public-en',
+                      [length]: 1 ] },
+                 [length]: 1 ] },
+            [length]: 1 ],
+         html: '&lt;h3>Be Bold...&lt;/h3>',
+         impact: 'critical',
+         none: [ [length]: 0 ],
+         target: [ '#vap-plan > a > h3', [length]: 1 ] },
+       { all: [ [length]: 0 ],
+         any:
+          [ { data:
+               { bgColor: '#344b6e',
+                 contrastRatio: 4.49,
+                 fgColor: '#acbad0',
+                 fontSize: '9.0pt',
+                 fontWeight: 'normal',
+                 missingData: [ [length]: 0 ] },
+              id: 'color-contrast',
+              impact: 'critical',
+              message: 'Element has insufficient color contrast of 4.49 (foreground color: #acbad0, background color: #344b6e, font size: 9.0pt, font weight: normal)',
+              relatedNodes:
+               [ { html: '&lt;body class="public-en" data-twttr-rendered="true">',
+                   target:
+                    [ '.js.no-flexbox.flexbox-legacy.canvas.canvastext.webgl.no-touch.geolocation.postmessage.websqldatabase.indexeddb.hashchange.history.draganddrop.websockets.rgba.hsla.multiplebgs.backgroundsize.borderimage.borderradius.boxshadow.textshadow.opacity.cssanimations.csscolumns.cssgradients.cssreflections.csstransforms.csstransforms3d.csstransitions.fontface.generatedcontent.video.audio.localstorage.sessionstorage.webworkers.applicationcache.svg.inlinesvg.smil.svgclippaths.js.no-flexbox.flexbox-legacy.canvas.canvastext.webgl.no-touch.geolocation.postmessage.websqldatabase.indexeddb.hashchange.history.draganddrop.websockets.rgba.hsla.multiplebgs.backgroundsize.borderimage.borderradius.boxshadow.textshadow.opacity.cssanimations.csscolumns.cssgradients.cssreflections.csstransforms.csstransforms3d.csstransitions.fontface.generatedcontent.video.audio.localstorage.sessionstorage.webworkers.applicationcache.svg.inlinesvg.smil.svgclippaths.deque-axe-is-ready > .public-en',
+                      [length]: 1 ] },
+                 [length]: 1 ] },
+            [length]: 1 ],
+         html: '&lt;p>Step out of your comfort zone, and into a rocket with enough fuel to blast a Manhattan-sized crater if it explodes. But it won\'t. Probably.&lt;br>\n&nbsp; &lt;/p>',
+         impact: 'critical',
+         none: [ [length]: 0 ],
+         target: [ '#vap-plan > p:nth-of-type(2)', [length]: 1 ] },
+       { all: [ [length]: 0 ],
+         any:
+          [ { data:
+               { bgColor: '#344b6e',
+                 contrastRatio: 1.87,
+                 fgColor: '#067ab4',
+                 fontSize: '13.5pt',
+                 fontWeight: 'normal',
+                 missingData: [ [length]: 0 ] },
+              id: 'color-contrast',
+              impact: 'critical',
+              message: 'Element has insufficient color contrast of 1.87 (foreground color: #067ab4, background color: #344b6e, font size: 13.5pt, font weight: normal)',
+              relatedNodes:
+               [ { html: '&lt;body class="public-en" data-twttr-rendered="true">',
+                   target:
+                    [ '.js.no-flexbox.flexbox-legacy.canvas.canvastext.webgl.no-touch.geolocation.postmessage.websqldatabase.indexeddb.hashchange.history.draganddrop.websockets.rgba.hsla.multiplebgs.backgroundsize.borderimage.borderradius.boxshadow.textshadow.opacity.cssanimations.csscolumns.cssgradients.cssreflections.csstransforms.csstransforms3d.csstransitions.fontface.generatedcontent.video.audio.localstorage.sessionstorage.webworkers.applicationcache.svg.inlinesvg.smil.svgclippaths.js.no-flexbox.flexbox-legacy.canvas.canvastext.webgl.no-touch.geolocation.postmessage.websqldatabase.indexeddb.hashchange.history.draganddrop.websockets.rgba.hsla.multiplebgs.backgroundsize.borderimage.borderradius.boxshadow.textshadow.opacity.cssanimations.csscolumns.cssgradients.cssreflections.csstransforms.csstransforms3d.csstransitions.fontface.generatedcontent.video.audio.localstorage.sessionstorage.webworkers.applicationcache.svg.inlinesvg.smil.svgclippaths.deque-axe-is-ready > .public-en',
+                      [length]: 1 ] },
+                 [length]: 1 ] },
+            [length]: 1 ],
+         html: '&lt;h3>Countdown...&lt;/h3>',
+         impact: 'critical',
+         none: [ [length]: 0 ],
+         target: [ '#vap-book > a > h3', [length]: 1 ] },
+       { all: [ [length]: 0 ],
+         any:
+          [ { data:
+               { bgColor: '#344b6e',
+                 contrastRatio: 4.49,
+                 fgColor: '#acbad0',
+                 fontSize: '9.0pt',
+                 fontWeight: 'normal',
+                 missingData: [ [length]: 0 ] },
+              id: 'color-contrast',
+              impact: 'critical',
+              message: 'Element has insufficient color contrast of 4.49 (foreground color: #acbad0, background color: #344b6e, font size: 9.0pt, font weight: normal)',
+              relatedNodes:
+               [ { html: '&lt;body class="public-en" data-twttr-rendered="true">',
+                   target:
+                    [ '.js.no-flexbox.flexbox-legacy.canvas.canvastext.webgl.no-touch.geolocation.postmessage.websqldatabase.indexeddb.hashchange.history.draganddrop.websockets.rgba.hsla.multiplebgs.backgroundsize.borderimage.borderradius.boxshadow.textshadow.opacity.cssanimations.csscolumns.cssgradients.cssreflections.csstransforms.csstransforms3d.csstransitions.fontface.generatedcontent.video.audio.localstorage.sessionstorage.webworkers.applicationcache.svg.inlinesvg.smil.svgclippaths.js.no-flexbox.flexbox-legacy.canvas.canvastext.webgl.no-touch.geolocation.postmessage.websqldatabase.indexeddb.hashchange.history.draganddrop.websockets.rgba.hsla.multiplebgs.backgroundsize.borderimage.borderradius.boxshadow.textshadow.opacity.cssanimations.csscolumns.cssgradients.cssreflections.csstransforms.csstransforms3d.csstransitions.fontface.generatedcontent.video.audio.localstorage.sessionstorage.webworkers.applicationcache.svg.inlinesvg.smil.svgclippaths.deque-axe-is-ready > .public-en',
+                      [length]: 1 ] },
+                 [length]: 1 ] },
+            [length]: 1 ],
+         html: '&lt;p>If you\'re serious about traveling to Mars - really serious - then &lt;a href="/demo/mars/mars2?a=last_will">prepare your last will and testament&lt;/a>, and book a trip! &lt;/p>',
+         impact: 'critical',
+         none: [ [length]: 0 ],
+         target: [ '#vap-book > p:nth-of-type(2)', [length]: 1 ] },
+       { all: [ [length]: 0 ],
+         any:
+          [ { data:
+               { bgColor: '#344b6e',
+                 contrastRatio: 2.83,
+                 fgColor: '#46a546',
+                 fontSize: '13.5pt',
+                 fontWeight: 'normal',
+                 missingData: [ [length]: 0 ] },
+              id: 'color-contrast',
+              impact: 'critical',
+              message: 'Element has insufficient color contrast of 2.83 (foreground color: #46a546, background color: #344b6e, font size: 13.5pt, font weight: normal)',
+              relatedNodes:
+               [ { html: '&lt;body class="public-en" data-twttr-rendered="true">',
+                   target:
+                    [ '.js.no-flexbox.flexbox-legacy.canvas.canvastext.webgl.no-touch.geolocation.postmessage.websqldatabase.indexeddb.hashchange.history.draganddrop.websockets.rgba.hsla.multiplebgs.backgroundsize.borderimage.borderradius.boxshadow.textshadow.opacity.cssanimations.csscolumns.cssgradients.cssreflections.csstransforms.csstransforms3d.csstransitions.fontface.generatedcontent.video.audio.localstorage.sessionstorage.webworkers.applicationcache.svg.inlinesvg.smil.svgclippaths.js.no-flexbox.flexbox-legacy.canvas.canvastext.webgl.no-touch.geolocation.postmessage.websqldatabase.indexeddb.hashchange.history.draganddrop.websockets.rgba.hsla.multiplebgs.backgroundsize.borderimage.borderradius.boxshadow.textshadow.opacity.cssanimations.csscolumns.cssgradients.cssreflections.csstransforms.csstransforms3d.csstransitions.fontface.generatedcontent.video.audio.localstorage.sessionstorage.webworkers.applicationcache.svg.inlinesvg.smil.svgclippaths.deque-axe-is-ready > .public-en',
+                      [length]: 1 ] },
+                 [length]: 1 ] },
+            [length]: 1 ],
+         html: '&lt;h3>Blast Off!&lt;/h3>',
+         impact: 'critical',
+         none: [ [length]: 0 ],
+         target: [ '#vap-travel > a > h3', [length]: 1 ] },
+       { all: [ [length]: 0 ],
+         any:
+          [ { data:
+               { bgColor: '#344b6e',
+                 contrastRatio: 4.49,
+                 fgColor: '#acbad0',
+                 fontSize: '9.0pt',
+                 fontWeight: 'normal',
+                 missingData: [ [length]: 0 ] },
+              id: 'color-contrast',
+              impact: 'critical',
+              message: 'Element has insufficient color contrast of 4.49 (foreground color: #acbad0, background color: #344b6e, font size: 9.0pt, font weight: normal)',
+              relatedNodes:
+               [ { html: '&lt;body class="public-en" data-twttr-rendered="true">',
+                   target:
+                    [ '.js.no-flexbox.flexbox-legacy.canvas.canvastext.webgl.no-touch.geolocation.postmessage.websqldatabase.indexeddb.hashchange.history.draganddrop.websockets.rgba.hsla.multiplebgs.backgroundsize.borderimage.borderradius.boxshadow.textshadow.opacity.cssanimations.csscolumns.cssgradients.cssreflections.csstransforms.csstransforms3d.csstransitions.fontface.generatedcontent.video.audio.localstorage.sessionstorage.webworkers.applicationcache.svg.inlinesvg.smil.svgclippaths.js.no-flexbox.flexbox-legacy.canvas.canvastext.webgl.no-touch.geolocation.postmessage.websqldatabase.indexeddb.hashchange.history.draganddrop.websockets.rgba.hsla.multiplebgs.backgroundsize.borderimage.borderradius.boxshadow.textshadow.opacity.cssanimations.csscolumns.cssgradients.cssreflections.csstransforms.csstransforms3d.csstransitions.fontface.generatedcontent.video.audio.localstorage.sessionstorage.webworkers.applicationcache.svg.inlinesvg.smil.svgclippaths.deque-axe-is-ready > .public-en',
+                      [length]: 1 ] },
+                 [length]: 1 ] },
+            [length]: 1 ],
+         html: '&lt;p>Expect violent turbulence, bone-crushing g-forces, muscle atrophy, and certain death (hey, everyone\'s death is certain at some point, right?).&lt;br>\n&nbsp; &lt;/p>',
+         impact: 'critical',
+         none: [ [length]: 0 ],
+         target: [ '#vap-travel > p:nth-of-type(2)', [length]: 1 ] },
+       [length]: 7 ],
+    tags: [ 'cat.color', 'wcag2aa', 'wcag143', [length]: 3 ] },
+  { description: 'Ensures every id attribute value is unique',
+    help: 'id attribute value must be unique',
+    helpUrl: 'https://dequeuniversity.com/rules/axe/2.2/duplicate-id?application=webdriverjs',
+    id: 'duplicate-id',
+    impact: 'critical',
+    nodes:
+     [ { all: [ [length]: 0 ],
+         any:
+          [ { data: 'control-panel',
+              id: 'duplicate-id',
+              impact: 'critical',
+              message: 'Document has multiple elements with the same id attribute: control-panel',
+              relatedNodes:
+               [ { html: '&lt;div id="control-panel" class="container-fluid-full">',
+                   target:
+                    [ '.js.no-flexbox.flexbox-legacy.canvas.canvastext.webgl.no-touch.geolocation.postmessage.websqldatabase.indexeddb.hashchange.history.draganddrop.websockets.rgba.hsla.multiplebgs.backgroundsize.borderimage.borderradius.boxshadow.textshadow.opacity.cssanimations.csscolumns.cssgradients.cssreflections.csstransforms.csstransforms3d.csstransitions.fontface.generatedcontent.video.audio.localstorage.sessionstorage.webworkers.applicationcache.svg.inlinesvg.smil.svgclippaths.js.no-flexbox.flexbox-legacy.canvas.canvastext.webgl.no-touch.geolocation.postmessage.websqldatabase.indexeddb.hashchange.history.draganddrop.websockets.rgba.hsla.multiplebgs.backgroundsize.borderimage.borderradius.boxshadow.textshadow.opacity.cssanimations.csscolumns.cssgradients.cssreflections.csstransforms.csstransforms3d.csstransitions.fontface.generatedcontent.video.audio.localstorage.sessionstorage.webworkers.applicationcache.svg.inlinesvg.smil.svgclippaths.deque-axe-is-ready > .public-en > .loggedin > .container-fluid-full',
+                      [length]: 1 ] },
+                 [length]: 1 ] },
+            [length]: 1 ],
+         html: '&lt;div id="control-panel" class="container-fluid-full">',
+         impact: 'critical',
+         none: [ [length]: 0 ],
+         target:
+          [ '.js.no-flexbox.flexbox-legacy.canvas.canvastext.webgl.no-touch.geolocation.postmessage.websqldatabase.indexeddb.hashchange.history.draganddrop.websockets.rgba.hsla.multiplebgs.backgroundsize.borderimage.borderradius.boxshadow.textshadow.opacity.cssanimations.csscolumns.cssgradients.cssreflections.csstransforms.csstransforms3d.csstransitions.fontface.generatedcontent.video.audio.localstorage.sessionstorage.webworkers.applicationcache.svg.inlinesvg.smil.svgclippaths.js.no-flexbox.flexbox-legacy.canvas.canvastext.webgl.no-touch.geolocation.postmessage.websqldatabase.indexeddb.hashchange.history.draganddrop.websockets.rgba.hsla.multiplebgs.backgroundsize.borderimage.borderradius.boxshadow.textshadow.opacity.cssanimations.csscolumns.cssgradients.cssreflections.csstransforms.csstransforms3d.csstransitions.fontface.generatedcontent.video.audio.localstorage.sessionstorage.webworkers.applicationcache.svg.inlinesvg.smil.svgclippaths.deque-axe-is-ready > .public-en > .loginnow > .container-fluid-full',
+            [length]: 1 ] },
+       { all: [ [length]: 0 ],
+         any:
+          [ { data: 'left-control-nav',
+              id: 'duplicate-id',
+              impact: 'critical',
+              message: 'Document has multiple elements with the same id attribute: left-control-nav',
+              relatedNodes:
+               [ { html: '&lt;nav id="left-control-nav" class="pull-left">',
+                   target:
+                    [ '.js.no-flexbox.flexbox-legacy.canvas.canvastext.webgl.no-touch.geolocation.postmessage.websqldatabase.indexeddb.hashchange.history.draganddrop.websockets.rgba.hsla.multiplebgs.backgroundsize.borderimage.borderradius.boxshadow.textshadow.opacity.cssanimations.csscolumns.cssgradients.cssreflections.csstransforms.csstransforms3d.csstransitions.fontface.generatedcontent.video.audio.localstorage.sessionstorage.webworkers.applicationcache.svg.inlinesvg.smil.svgclippaths.js.no-flexbox.flexbox-legacy.canvas.canvastext.webgl.no-touch.geolocation.postmessage.websqldatabase.indexeddb.hashchange.history.draganddrop.websockets.rgba.hsla.multiplebgs.backgroundsize.borderimage.borderradius.boxshadow.textshadow.opacity.cssanimations.csscolumns.cssgradients.cssreflections.csstransforms.csstransforms3d.csstransitions.fontface.generatedcontent.video.audio.localstorage.sessionstorage.webworkers.applicationcache.svg.inlinesvg.smil.svgclippaths.deque-axe-is-ready > .public-en > .loggedin > .container-fluid-full > .container > .span5.left-first.pull-left > nav',
+                      [length]: 1 ] },
+                 [length]: 1 ] },
+            [length]: 1 ],
+         html: '&lt;nav id="left-control-nav" class="pull-left">',
+         impact: 'critical',
+         none: [ [length]: 0 ],
+         target:
+          [ '.js.no-flexbox.flexbox-legacy.canvas.canvastext.webgl.no-touch.geolocation.postmessage.websqldatabase.indexeddb.hashchange.history.draganddrop.websockets.rgba.hsla.multiplebgs.backgroundsize.borderimage.borderradius.boxshadow.textshadow.opacity.cssanimations.csscolumns.cssgradients.cssreflections.csstransforms.csstransforms3d.csstransitions.fontface.generatedcontent.video.audio.localstorage.sessionstorage.webworkers.applicationcache.svg.inlinesvg.smil.svgclippaths.js.no-flexbox.flexbox-legacy.canvas.canvastext.webgl.no-touch.geolocation.postmessage.websqldatabase.indexeddb.hashchange.history.draganddrop.websockets.rgba.hsla.multiplebgs.backgroundsize.borderimage.borderradius.boxshadow.textshadow.opacity.cssanimations.csscolumns.cssgradients.cssreflections.csstransforms.csstransforms3d.csstransitions.fontface.generatedcontent.video.audio.localstorage.sessionstorage.webworkers.applicationcache.svg.inlinesvg.smil.svgclippaths.deque-axe-is-ready > .public-en > .loginnow > .container-fluid-full > .container > .span5.left-first.pull-left > nav',
+            [length]: 1 ] },
+       { all: [ [length]: 0 ],
+         any:
+          [ { data: 'search-bar',
+              id: 'duplicate-id',
+              impact: 'critical',
+              message: 'Document has multiple elements with the same id attribute: search-bar',
+              relatedNodes:
+               [ { html: '&lt;div id="search-bar" class="pull-left">',
+                   target:
+                    [ '.js.no-flexbox.flexbox-legacy.canvas.canvastext.webgl.no-touch.geolocation.postmessage.websqldatabase.indexeddb.hashchange.history.draganddrop.websockets.rgba.hsla.multiplebgs.backgroundsize.borderimage.borderradius.boxshadow.textshadow.opacity.cssanimations.csscolumns.cssgradients.cssreflections.csstransforms.csstransforms3d.csstransitions.fontface.generatedcontent.video.audio.localstorage.sessionstorage.webworkers.applicationcache.svg.inlinesvg.smil.svgclippaths.js.no-flexbox.flexbox-legacy.canvas.canvastext.webgl.no-touch.geolocation.postmessage.websqldatabase.indexeddb.hashchange.history.draganddrop.websockets.rgba.hsla.multiplebgs.backgroundsize.borderimage.borderradius.boxshadow.textshadow.opacity.cssanimations.csscolumns.cssgradients.cssreflections.csstransforms.csstransforms3d.csstransitions.fontface.generatedcontent.video.audio.localstorage.sessionstorage.webworkers.applicationcache.svg.inlinesvg.smil.svgclippaths.deque-axe-is-ready > .public-en > .loggedin > .container-fluid-full > .container > .span5.left-first.pull-left > div',
+                      [length]: 1 ] },
+                 [length]: 1 ] },
+            [length]: 1 ],
+         html: '&lt;div id="search-bar" class="pull-left">',
+         impact: 'critical',
+         none: [ [length]: 0 ],
+         target:
+          [ '.js.no-flexbox.flexbox-legacy.canvas.canvastext.webgl.no-touch.geolocation.postmessage.websqldatabase.indexeddb.hashchange.history.draganddrop.websockets.rgba.hsla.multiplebgs.backgroundsize.borderimage.borderradius.boxshadow.textshadow.opacity.cssanimations.csscolumns.cssgradients.cssreflections.csstransforms.csstransforms3d.csstransitions.fontface.generatedcontent.video.audio.localstorage.sessionstorage.webworkers.applicationcache.svg.inlinesvg.smil.svgclippaths.js.no-flexbox.flexbox-legacy.canvas.canvastext.webgl.no-touch.geolocation.postmessage.websqldatabase.indexeddb.hashchange.history.draganddrop.websockets.rgba.hsla.multiplebgs.backgroundsize.borderimage.borderradius.boxshadow.textshadow.opacity.cssanimations.csscolumns.cssgradients.cssreflections.csstransforms.csstransforms3d.csstransitions.fontface.generatedcontent.video.audio.localstorage.sessionstorage.webworkers.applicationcache.svg.inlinesvg.smil.svgclippaths.deque-axe-is-ready > .public-en > .loginnow > .container-fluid-full > .container > .span5.left-first.pull-left > div',
+            [length]: 1 ] },
+       { all: [ [length]: 0 ],
+         any:
+          [ { data: 'search',
+              id: 'duplicate-id',
+              impact: 'critical',
+              message: 'Document has multiple elements with the same id attribute: search',
+              relatedNodes:
+               [ { html: '&lt;form id="search" action="/demo/mars/mars2" method="get">\n\t\t\t\t\t\t    &lt;input type="hidden" name="fn" value="Search">\t\t\t\t\t\t  \n\t\t\t\t\t\t\t&lt;input type="text" class="search" name="query" placeholder="search">\n\t\t\t\t\t\t\t&lt;input type="submit" class="control-search">\n\t\t\t\t\t\t&lt;/form>',
+                   target:
+                    [ '.js.no-flexbox.flexbox-legacy.canvas.canvastext.webgl.no-touch.geolocation.postmessage.websqldatabase.indexeddb.hashchange.history.draganddrop.websockets.rgba.hsla.multiplebgs.backgroundsize.borderimage.borderradius.boxshadow.textshadow.opacity.cssanimations.csscolumns.cssgradients.cssreflections.csstransforms.csstransforms3d.csstransitions.fontface.generatedcontent.video.audio.localstorage.sessionstorage.webworkers.applicationcache.svg.inlinesvg.smil.svgclippaths.js.no-flexbox.flexbox-legacy.canvas.canvastext.webgl.no-touch.geolocation.postmessage.websqldatabase.indexeddb.hashchange.history.draganddrop.websockets.rgba.hsla.multiplebgs.backgroundsize.borderimage.borderradius.boxshadow.textshadow.opacity.cssanimations.csscolumns.cssgradients.cssreflections.csstransforms.csstransforms3d.csstransitions.fontface.generatedcontent.video.audio.localstorage.sessionstorage.webworkers.applicationcache.svg.inlinesvg.smil.svgclippaths.deque-axe-is-ready > .public-en > .loggedin > .container-fluid-full > .container > .span5.left-first.pull-left > div > form',
+                      [length]: 1 ] },
+                 [length]: 1 ] },
+            [length]: 1 ],
+         html: '&lt;form id="search" action="/demo/mars/mars2" method="get">\n\t\t\t\t\t\t    &lt;input type="hidden" name="fn" value="Search">\t\t\t\t\t\t  \n\t\t\t\t\t\t\t&lt;input type="text" class="search" name="query" placeholder="search">\n\t\t\t\t\t\t\t&lt;input type="submit" class="control-search">\n\t\t\t\t\t\t&lt;/form>',
+         impact: 'critical',
+         none: [ [length]: 0 ],
+         target:
+          [ '.js.no-flexbox.flexbox-legacy.canvas.canvastext.webgl.no-touch.geolocation.postmessage.websqldatabase.indexeddb.hashchange.history.draganddrop.websockets.rgba.hsla.multiplebgs.backgroundsize.borderimage.borderradius.boxshadow.textshadow.opacity.cssanimations.csscolumns.cssgradients.cssreflections.csstransforms.csstransforms3d.csstransitions.fontface.generatedcontent.video.audio.localstorage.sessionstorage.webworkers.applicationcache.svg.inlinesvg.smil.svgclippaths.js.no-flexbox.flexbox-legacy.canvas.canvastext.webgl.no-touch.geolocation.postmessage.websqldatabase.indexeddb.hashchange.history.draganddrop.websockets.rgba.hsla.multiplebgs.backgroundsize.borderimage.borderradius.boxshadow.textshadow.opacity.cssanimations.csscolumns.cssgradients.cssreflections.csstransforms.csstransforms3d.csstransitions.fontface.generatedcontent.video.audio.localstorage.sessionstorage.webworkers.applicationcache.svg.inlinesvg.smil.svgclippaths.deque-axe-is-ready > .public-en > .loginnow > .container-fluid-full > .container > .span5.left-first.pull-left > div > form',
+            [length]: 1 ] },
+       { all: [ [length]: 0 ],
+         any:
+          [ { data: 'right-control-nav',
+              id: 'duplicate-id',
+              impact: 'critical',
+              message: 'Document has multiple elements with the same id attribute: right-control-nav',
+              relatedNodes:
+               [ { html: '&lt;nav id="right-control-nav" class="pull-right">',
+                   target:
+                    [ '.js.no-flexbox.flexbox-legacy.canvas.canvastext.webgl.no-touch.geolocation.postmessage.websqldatabase.indexeddb.hashchange.history.draganddrop.websockets.rgba.hsla.multiplebgs.backgroundsize.borderimage.borderradius.boxshadow.textshadow.opacity.cssanimations.csscolumns.cssgradients.cssreflections.csstransforms.csstransforms3d.csstransitions.fontface.generatedcontent.video.audio.localstorage.sessionstorage.webworkers.applicationcache.svg.inlinesvg.smil.svgclippaths.js.no-flexbox.flexbox-legacy.canvas.canvastext.webgl.no-touch.geolocation.postmessage.websqldatabase.indexeddb.hashchange.history.draganddrop.websockets.rgba.hsla.multiplebgs.backgroundsize.borderimage.borderradius.boxshadow.textshadow.opacity.cssanimations.csscolumns.cssgradients.cssreflections.csstransforms.csstransforms3d.csstransitions.fontface.generatedcontent.video.audio.localstorage.sessionstorage.webworkers.applicationcache.svg.inlinesvg.smil.svgclippaths.deque-axe-is-ready > .public-en > .loggedin > .container-fluid-full > .container > .span7.pull-right > .pull-right',
+                      [length]: 1 ] },
+                 [length]: 1 ] },
+            [length]: 1 ],
+         html: '&lt;nav id="right-control-nav" class="pull-right" style="display: inline;">',
+         impact: 'critical',
+         none: [ [length]: 0 ],
+         target:
+          [ '.js.no-flexbox.flexbox-legacy.canvas.canvastext.webgl.no-touch.geolocation.postmessage.websqldatabase.indexeddb.hashchange.history.draganddrop.websockets.rgba.hsla.multiplebgs.backgroundsize.borderimage.borderradius.boxshadow.textshadow.opacity.cssanimations.csscolumns.cssgradients.cssreflections.csstransforms.csstransforms3d.csstransitions.fontface.generatedcontent.video.audio.localstorage.sessionstorage.webworkers.applicationcache.svg.inlinesvg.smil.svgclippaths.js.no-flexbox.flexbox-legacy.canvas.canvastext.webgl.no-touch.geolocation.postmessage.websqldatabase.indexeddb.hashchange.history.draganddrop.websockets.rgba.hsla.multiplebgs.backgroundsize.borderimage.borderradius.boxshadow.textshadow.opacity.cssanimations.csscolumns.cssgradients.cssreflections.csstransforms.csstransforms3d.csstransitions.fontface.generatedcontent.video.audio.localstorage.sessionstorage.webworkers.applicationcache.svg.inlinesvg.smil.svgclippaths.deque-axe-is-ready > .public-en > .loginnow > .container-fluid-full > .container > .span7.pull-right > .pull-right',
+            [length]: 1 ] },
+       { all: [ [length]: 0 ],
+         any:
+          [ { data: 'vap-section',
+              id: 'duplicate-id',
+              impact: 'critical',
+              message: 'Document has multiple elements with the same id attribute: vap-section',
+              relatedNodes:
+               [ { html: '&lt;div id="vap-section">',
+                   target: [ '#left-column > div:nth-of-type(2)', [length]: 1 ] },
+                 [length]: 1 ] },
+            [length]: 1 ],
+         html: '&lt;div id="vap-section">\n&lt;h1 style="color:#eee;">Destination Mars &lt;/h1>\n\t&lt;h2 style="color:#acbad0;">A trip to Mars starts in your imagination. Are you bold enough, brave enough, &lt;strong>crazy enough?&lt;/strong> We are. You belong on Mars with crazies like us. Most of us don\'t bite. Much.&lt;/h2>&lt;/div>',
+         impact: 'critical',
+         none: [ [length]: 0 ],
+         target: [ '#left-column > div:nth-of-type(1)', [length]: 1 ] },
+       { all: [ [length]: 0 ],
+         any:
+          [ { data: 'nCountries',
+              id: 'duplicate-id',
+              impact: 'critical',
+              message: 'Document has multiple elements with the same id attribute: nCountries',
+              relatedNodes:
+               [ { html: '&lt;input type="hidden" name="nCountries" value="1" id="nCountries">',
+                   target: [ '#passfinder > input:nth-of-type(4)', [length]: 1 ] },
+                 [length]: 1 ] },
+            [length]: 1 ],
+         html: '&lt;input type="hidden" id="nCountries" name="nCountries">',
+         impact: 'critical',
+         none: [ [length]: 0 ],
+         target: [ '#select-country > input', [length]: 1 ] },
+       { all: [ [length]: 0 ],
+         any:
+          [ { data: 'passenger-select',
+              id: 'duplicate-id',
+              impact: 'critical',
+              message: 'Document has multiple elements with the same id attribute: passenger-select',
+              relatedNodes:
+               [ { html: '&lt;div id="passenger-select" class="widget-container middle">',
+                   target: [ '#passfinder > div:nth-of-type(2)', [length]: 1 ] },
+                 [length]: 1 ] },
+            [length]: 1 ],
+         html: '&lt;div id="passenger-select" class="widget-container middle">',
+         impact: 'critical',
+         none: [ [length]: 0 ],
+         target: [ '#form1 > div:nth-of-type(2)', [length]: 1 ] },
+       { all: [ [length]: 0 ],
+         any:
+          [ { data: 'passengers',
+              id: 'duplicate-id',
+              impact: 'critical',
+              message: 'Document has multiple elements with the same id attribute: passengers',
+              relatedNodes:
+               [ { html: '&lt;div id="passengers">',
+                   target:
+                    [ '#passfinder > div:nth-of-type(2) > .interior-container > div',
+                      [length]: 1 ] },
+                 [length]: 1 ] },
+            [length]: 1 ],
+         html: '&lt;div id="passengers">',
+         impact: 'critical',
+         none: [ [length]: 0 ],
+         target:
+          [ '#form1 > div:nth-of-type(2) > .interior-container > div:nth-of-type(2)',
+            [length]: 1 ] },
+       { all: [ [length]: 0 ],
+         any:
+          [ { data: 'traveler0',
+              id: 'duplicate-id',
+              impact: 'critical',
+              message: 'Document has multiple elements with the same id attribute: traveler0',
+              relatedNodes:
+               [ { html: '&lt;select id="traveler0" class="traveler-type" name="paxAge0">',
+                   target:
+                    [ '#r-passenger0 > .wrapper.age-range > .traveler-type',
+                      [length]: 1 ] },
+                 [length]: 1 ] },
+            [length]: 1 ],
+         html: '&lt;select id="traveler0" class="traveler-type">\n\t\t\t\t\t\t\t\t\t\t&lt;option value="0">Adult (26+)&lt;/option>\n\t\t\t\t\t\t\t\t\t\t&lt;option value="1">Youth (12-25)&lt;/option>\n\t\t\t\t\t\t\t\t\t\t&lt;option value="2">Child (4-11)&lt;/option>\n\t\t\t\t\t\t\t\t\t\t&lt;option value="3">Senior (60+)&lt;/option>\n\t\t\t\t\t\t\t\t\t&lt;/select>',
+         impact: 'critical',
+         none: [ [length]: 0 ],
+         target:
+          [ '#passenger0 > .wrapper.age-range > .traveler-type',
+            [length]: 1 ] },
+       { all: [ [length]: 0 ],
+         any:
+          [ { data: 'age0',
+              id: 'duplicate-id',
+              impact: 'critical',
+              message: 'Document has multiple elements with the same id attribute: age0',
+              relatedNodes:
+               [ { html: '&lt;select id="age0" name="youthAge0" class="age">',
+                   target: [ '#r-passenger0 > .wrapper.youth-age > .age', [length]: 1 ] },
+                 [length]: 1 ] },
+            [length]: 1 ],
+         html: '&lt;select id="age0" class="age">',
+         impact: 'critical',
+         none: [ [length]: 0 ],
+         target: [ '#passenger0 > .wrapper.youth-age > .age', [length]: 1 ] },
+       { all: [ [length]: 0 ],
+         any:
+          [ { data: 'default',
+              id: 'duplicate-id',
+              impact: 'critical',
+              message: 'Document has multiple elements with the same id attribute: default',
+              relatedNodes:
+               [ { html: '&lt;a target="player" data-text="Why Mars died" class="fader first" href="http://www.youtube.com/embed/oC31pqk9sak?controls=1&amp;showinfo=1&amp;modestbranding=0&amp;wmode=opaque&amp;enablejsapi=1" id="default">&lt;/a>',
+                   target:
+                    [ '#video-box > .interior-container > .vid-nav > a:nth-of-type(2)',
+                      [length]: 1 ] },
+                 { html: '&lt;a target="player" data-text="The world that never was" class="fader first" href="http://www.youtube.com/embed/JgMXPXdqJn8?controls=1&amp;showinfo=1&amp;modestbranding=0&amp;wmode=opaque&amp;enablejsapi=1" id="default">&lt;/a>',
+                   target:
+                    [ '#video-box > .interior-container > .vid-nav > a:nth-of-type(3)',
+                      [length]: 1 ] },
+                 [length]: 2 ] },
+            [length]: 1 ],
+         html: '&lt;a target="player" data-text="Life was possible on Mars" class="fader first active" href="http://www.youtube.com/embed/OagLGti_hTE?controls=1&amp;showinfo=1&amp;modestbranding=0&amp;wmode=opaque&amp;enablejsapi=1" id="default">&lt;/a>',
+         impact: 'critical',
+         none: [ [length]: 0 ],
+         target:
+          [ '#video-box > .interior-container > .vid-nav > .fader.first.active',
+            [length]: 1 ] },
+       { all: [ [length]: 0 ],
+         any:
+          [ { data: 'ui-datepicker-div',
+              id: 'duplicate-id',
+              impact: 'critical',
+              message: 'Document has multiple elements with the same id attribute: ui-datepicker-div',
+              relatedNodes:
+               [ { html: '&lt;div id="ui-datepicker-div" class="ui-datepicker ui-widget ui-widget-content ui-helper-clearfix ui-corner-all">&lt;/div>',
+                   target:
+                    [ '.js.no-flexbox.flexbox-legacy.canvas.canvastext.webgl.no-touch.geolocation.postmessage.websqldatabase.indexeddb.hashchange.history.draganddrop.websockets.rgba.hsla.multiplebgs.backgroundsize.borderimage.borderradius.boxshadow.textshadow.opacity.cssanimations.csscolumns.cssgradients.cssreflections.csstransforms.csstransforms3d.csstransitions.fontface.generatedcontent.video.audio.localstorage.sessionstorage.webworkers.applicationcache.svg.inlinesvg.smil.svgclippaths.js.no-flexbox.flexbox-legacy.canvas.canvastext.webgl.no-touch.geolocation.postmessage.websqldatabase.indexeddb.hashchange.history.draganddrop.websockets.rgba.hsla.multiplebgs.backgroundsize.borderimage.borderradius.boxshadow.textshadow.opacity.cssanimations.csscolumns.cssgradients.cssreflections.csstransforms.csstransforms3d.csstransitions.fontface.generatedcontent.video.audio.localstorage.sessionstorage.webworkers.applicationcache.svg.inlinesvg.smil.svgclippaths.deque-axe-is-ready > .public-en > div:nth-of-type(10)',
+                      [length]: 1 ] },
+                 [length]: 1 ] },
+            [length]: 1 ],
+         html: '&lt;div id="ui-datepicker-div" class="ui-datepicker ui-widget ui-widget-content ui-helper-clearfix ui-corner-all">&lt;/div>',
+         impact: 'critical',
+         none: [ [length]: 0 ],
+         target:
+          [ '.js.no-flexbox.flexbox-legacy.canvas.canvastext.webgl.no-touch.geolocation.postmessage.websqldatabase.indexeddb.hashchange.history.draganddrop.websockets.rgba.hsla.multiplebgs.backgroundsize.borderimage.borderradius.boxshadow.textshadow.opacity.cssanimations.csscolumns.cssgradients.cssreflections.csstransforms.csstransforms3d.csstransitions.fontface.generatedcontent.video.audio.localstorage.sessionstorage.webworkers.applicationcache.svg.inlinesvg.smil.svgclippaths.js.no-flexbox.flexbox-legacy.canvas.canvastext.webgl.no-touch.geolocation.postmessage.websqldatabase.indexeddb.hashchange.history.draganddrop.websockets.rgba.hsla.multiplebgs.backgroundsize.borderimage.borderradius.boxshadow.textshadow.opacity.cssanimations.csscolumns.cssgradients.cssreflections.csstransforms.csstransforms3d.csstransitions.fontface.generatedcontent.video.audio.localstorage.sessionstorage.webworkers.applicationcache.svg.inlinesvg.smil.svgclippaths.deque-axe-is-ready > .public-en > div:nth-of-type(9)',
+            [length]: 1 ] },
+       [length]: 13 ],
+    tags: [ 'cat.parsing', 'wcag2a', 'wcag411', [length]: 3 ] },
+  { description: 'Ensures &lt;iframe> and &lt;frame> elements contain a non-empty title attribute',
+    help: 'Frames must have title attribute',
+    helpUrl: 'https://dequeuniversity.com/rules/axe/2.2/frame-title?application=webdriverjs',
+    id: 'frame-title',
+    impact: 'critical',
+    nodes:
+     [ { all: [ [length]: 0 ],
+         any:
+          [ { data: null,
+              id: 'aria-label',
+              impact: 'critical',
+              message: 'aria-label attribute does not exist or is empty',
+              relatedNodes: [ [length]: 0 ] },
+            { data: null,
+              id: 'aria-labelledby',
+              impact: 'critical',
+              message: 'aria-labelledby attribute does not exist, references elements that do not exist or references elements that are empty or not visible',
+              relatedNodes: [ [length]: 0 ] },
+            { data: null,
+              id: 'non-empty-title',
+              impact: 'critical',
+              message: 'Element has no title attribute or the title attribute is empty',
+              relatedNodes: [ [length]: 0 ] },
+            { data: null,
+              id: 'role-presentation',
+              impact: 'moderate',
+              message: 'Element\'s default semantics were not overridden with role="presentation"',
+              relatedNodes: [ [length]: 0 ] },
+            { data: null,
+              id: 'role-none',
+              impact: 'moderate',
+              message: 'Element\'s default semantics were not overridden with role="none"',
+              relatedNodes: [ [length]: 0 ] },
+            [length]: 5 ],
+         html: '&lt;iframe width="365" height="205" name="player" id="player" src="https://www.youtube.com/embed/OagLGti_hTE?controls=1&amp;showinfo=1&amp;modestbranding=0&amp;wmode=opaque&amp;enablejsapi=1" frameborder="0" allowfullscreen="" cd_frame_id_="cff1794f3ec5c01fd7a128a35718c031">&lt;/iframe>',
+         impact: 'critical',
+         none: [ [length]: 0 ],
+         target: [ '#player', [length]: 1 ] },
+       { all: [ [length]: 0 ],
+         any:
+          [ { data: null,
+              id: 'aria-label',
+              impact: 'critical',
+              message: 'aria-label attribute does not exist or is empty',
+              relatedNodes: [ [length]: 0 ] },
+            { data: null,
+              id: 'aria-labelledby',
+              impact: 'critical',
+              message: 'aria-labelledby attribute does not exist, references elements that do not exist or references elements that are empty or not visible',
+              relatedNodes: [ [length]: 0 ] },
+            { data: null,
+              id: 'non-empty-title',
+              impact: 'critical',
+              message: 'Element has no title attribute or the title attribute is empty',
+              relatedNodes: [ [length]: 0 ] },
+            { data: null,
+              id: 'role-presentation',
+              impact: 'moderate',
+              message: 'Element\'s default semantics were not overridden with role="presentation"',
+              relatedNodes: [ [length]: 0 ] },
+            { data: null,
+              id: 'role-none',
+              impact: 'moderate',
+              message: 'Element\'s default semantics were not overridden with role="none"',
+              relatedNodes: [ [length]: 0 ] },
+            [length]: 5 ],
+         html: '&lt;iframe id="fafbba78" name="f2bc5e72d" scrolling="no" style="border: none; overflow: hidden; height: 62px; width: 292px;" class="fb_ltr" src="/assets/demo-sites/mars/js/likebox.html" cd_frame_id_="555346de1cca73b48cf446ddfbe19cab">&lt;/iframe>',
+         impact: 'critical',
+         none: [ [length]: 0 ],
+         target: [ '#fafbba78', [length]: 1 ] },
+       [length]: 2 ],
+    tags:
+     [ 'cat.text-alternatives',
+       'wcag2a',
+       'wcag241',
+       'section508',
+       'section508.22.i',
+       [length]: 5 ] },
+  { description: 'Ensures every HTML document has a lang attribute',
+    help: '&lt;html> element must have a lang attribute',
+    helpUrl: 'https://dequeuniversity.com/rules/axe/2.2/html-has-lang?application=webdriverjs',
+    id: 'html-has-lang',
+    impact: 'serious',
+    nodes:
+     [ { all: [ [length]: 0 ],
+         any:
+          [ { data: null,
+              id: 'has-lang',
+              impact: 'serious',
+              message: 'The &lt;html> element does not have a lang attribute',
+              relatedNodes: [ [length]: 0 ] },
+            [length]: 1 ],
+         html: '&lt;html class=" js no-flexbox flexbox-legacy canvas canvastext webgl no-touch geolocation postmessage websqldatabase indexeddb hashchange history draganddrop websockets rgba hsla multiplebgs backgroundsize borderimage borderradius boxshadow textshadow opacity cssanimations csscolumns cssgradients cssreflections csstransforms csstransforms3d csstransitions fontface generatedcontent video audio localstorage sessionstorage webworkers applicationcache svg inlinesvg smil svgclippaths js no-flexbox flexbox-legacy canvas canvastext webgl no-touch geolocation postmessage websqldatabase indexeddb hashchange history draganddrop websockets rgba hsla multiplebgs backgroundsize borderimage borderradius boxshadow textshadow opacity cssanimations csscolumns cssgradients cssreflections csstransforms csstransforms3d csstransitions fontface generatedcontent video audio localstorage sessionstorage webworkers applicationcache svg inlinesvg smil svgclippaths deque-axe-is-ready">',
+         impact: 'serious',
+         none: [ [length]: 0 ],
+         target:
+          [ '.js.no-flexbox.flexbox-legacy.canvas.canvastext.webgl.no-touch.geolocation.postmessage.websqldatabase.indexeddb.hashchange.history.draganddrop.websockets.rgba.hsla.multiplebgs.backgroundsize.borderimage.borderradius.boxshadow.textshadow.opacity.cssanimations.csscolumns.cssgradients.cssreflections.csstransforms.csstransforms3d.csstransitions.fontface.generatedcontent.video.audio.localstorage.sessionstorage.webworkers.applicationcache.svg.inlinesvg.smil.svgclippaths.js.no-flexbox.flexbox-legacy.canvas.canvastext.webgl.no-touch.geolocation.postmessage.websqldatabase.indexeddb.hashchange.history.draganddrop.websockets.rgba.hsla.multiplebgs.backgroundsize.borderimage.borderradius.boxshadow.textshadow.opacity.cssanimations.csscolumns.cssgradients.cssreflections.csstransforms.csstransforms3d.csstransitions.fontface.generatedcontent.video.audio.localstorage.sessionstorage.webworkers.applicationcache.svg.inlinesvg.smil.svgclippaths.deque-axe-is-ready',
+            [length]: 1 ] },
+       [length]: 1 ],
+    tags: [ 'cat.language', 'wcag2a', 'wcag311', [length]: 3 ] },
+  { description: 'Ensures &lt;img> elements have alternate text or a role of none or presentation',
+    help: 'Images must have alternate text',
+    helpUrl: 'https://dequeuniversity.com/rules/axe/2.2/image-alt?application=webdriverjs',
+    id: 'image-alt',
+    impact: 'critical',
+    nodes:
+     [ { all: [ [length]: 0 ],
+         any:
+          [ { data: null,
+              id: 'has-alt',
+              impact: 'critical',
+              message: 'Element does not have an alt attribute',
+              relatedNodes: [ [length]: 0 ] },
+            { data: null,
+              id: 'aria-label',
+              impact: 'critical',
+              message: 'aria-label attribute does not exist or is empty',
+              relatedNodes: [ [length]: 0 ] },
+            { data: null,
+              id: 'aria-labelledby',
+              impact: 'critical',
+              message: 'aria-labelledby attribute does not exist, references elements that do not exist or references elements that are empty or not visible',
+              relatedNodes: [ [length]: 0 ] },
+            { data: null,
+              id: 'non-empty-title',
+              impact: 'critical',
+              message: 'Element has no title attribute or the title attribute is empty',
+              relatedNodes: [ [length]: 0 ] },
+            { data: null,
+              id: 'role-presentation',
+              impact: 'moderate',
+              message: 'Element\'s default semantics were not overridden with role="presentation"',
+              relatedNodes: [ [length]: 0 ] },
+            { data: null,
+              id: 'role-none',
+              impact: 'moderate',
+              message: 'Element\'s default semantics were not overridden with role="none"',
+              relatedNodes: [ [length]: 0 ] },
+            [length]: 6 ],
+         html: '&lt;img src="/assets/demo-sites/mars/js/seg" width="1" height="1">',
+         impact: 'critical',
+         none: [ [length]: 0 ],
+         target:
+          [ '.js.no-flexbox.flexbox-legacy.canvas.canvastext.webgl.no-touch.geolocation.postmessage.websqldatabase.indexeddb.hashchange.history.draganddrop.websockets.rgba.hsla.multiplebgs.backgroundsize.borderimage.borderradius.boxshadow.textshadow.opacity.cssanimations.csscolumns.cssgradients.cssreflections.csstransforms.csstransforms3d.csstransitions.fontface.generatedcontent.video.audio.localstorage.sessionstorage.webworkers.applicationcache.svg.inlinesvg.smil.svgclippaths.js.no-flexbox.flexbox-legacy.canvas.canvastext.webgl.no-touch.geolocation.postmessage.websqldatabase.indexeddb.hashchange.history.draganddrop.websockets.rgba.hsla.multiplebgs.backgroundsize.borderimage.borderradius.boxshadow.textshadow.opacity.cssanimations.csscolumns.cssgradients.cssreflections.csstransforms.csstransforms3d.csstransitions.fontface.generatedcontent.video.audio.localstorage.sessionstorage.webworkers.applicationcache.svg.inlinesvg.smil.svgclippaths.deque-axe-is-ready > .public-en > div:nth-of-type(1) > img:nth-of-type(3)',
+            [length]: 1 ] },
+       { all: [ [length]: 0 ],
+         any:
+          [ { data: null,
+              id: 'has-alt',
+              impact: 'critical',
+              message: 'Element does not have an alt attribute',
+              relatedNodes: [ [length]: 0 ] },
+            { data: null,
+              id: 'aria-label',
+              impact: 'critical',
+              message: 'aria-label attribute does not exist or is empty',
+              relatedNodes: [ [length]: 0 ] },
+            { data: null,
+              id: 'aria-labelledby',
+              impact: 'critical',
+              message: 'aria-labelledby attribute does not exist, references elements that do not exist or references elements that are empty or not visible',
+              relatedNodes: [ [length]: 0 ] },
+            { data: null,
+              id: 'non-empty-title',
+              impact: 'critical',
+              message: 'Element has no title attribute or the title attribute is empty',
+              relatedNodes: [ [length]: 0 ] },
+            { data: null,
+              id: 'role-presentation',
+              impact: 'moderate',
+              message: 'Element\'s default semantics were not overridden with role="presentation"',
+              relatedNodes: [ [length]: 0 ] },
+            { data: null,
+              id: 'role-none',
+              impact: 'moderate',
+              message: 'Element\'s default semantics were not overridden with role="none"',
+              relatedNodes: [ [length]: 0 ] },
+            [length]: 6 ],
+         html: '&lt;img src="/assets/demo-sites/mars/images/mars-spaceman.jpg" class="" width="210" height="120">',
+         impact: 'critical',
+         none: [ [length]: 0 ],
+         target:
+          [ '#vertical-carousel > .carousel > ul > li:nth-of-type(1) > a > img',
+            [length]: 1 ] },
+       { all: [ [length]: 0 ],
+         any:
+          [ { data: null,
+              id: 'has-alt',
+              impact: 'critical',
+              message: 'Element does not have an alt attribute',
+              relatedNodes: [ [length]: 0 ] },
+            { data: null,
+              id: 'aria-label',
+              impact: 'critical',
+              message: 'aria-label attribute does not exist or is empty',
+              relatedNodes: [ [length]: 0 ] },
+            { data: null,
+              id: 'aria-labelledby',
+              impact: 'critical',
+              message: 'aria-labelledby attribute does not exist, references elements that do not exist or references elements that are empty or not visible',
+              relatedNodes: [ [length]: 0 ] },
+            { data: null,
+              id: 'non-empty-title',
+              impact: 'critical',
+              message: 'Element has no title attribute or the title attribute is empty',
+              relatedNodes: [ [length]: 0 ] },
+            { data: null,
+              id: 'role-presentation',
+              impact: 'moderate',
+              message: 'Element\'s default semantics were not overridden with role="presentation"',
+              relatedNodes: [ [length]: 0 ] },
+            { data: null,
+              id: 'role-none',
+              impact: 'moderate',
+              message: 'Element\'s default semantics were not overridden with role="none"',
+              relatedNodes: [ [length]: 0 ] },
+            [length]: 6 ],
+         html: '&lt;img src="/assets/demo-sites/mars/images/mars-spaceman.jpg" class="" width="210" height="120">',
+         impact: 'critical',
+         none: [ [length]: 0 ],
+         target:
+          [ '#vertical-carousel > .carousel > ul > li:nth-of-type(8) > a > img',
+            [length]: 1 ] },
+       { all: [ [length]: 0 ],
+         any:
+          [ { data: null,
+              id: 'has-alt',
+              impact: 'critical',
+              message: 'Element does not have an alt attribute',
+              relatedNodes: [ [length]: 0 ] },
+            { data: null,
+              id: 'aria-label',
+              impact: 'critical',
+              message: 'aria-label attribute does not exist or is empty',
+              relatedNodes: [ [length]: 0 ] },
+            { data: null,
+              id: 'aria-labelledby',
+              impact: 'critical',
+              message: 'aria-labelledby attribute does not exist, references elements that do not exist or references elements that are empty or not visible',
+              relatedNodes: [ [length]: 0 ] },
+            { data: null,
+              id: 'non-empty-title',
+              impact: 'critical',
+              message: 'Element has no title attribute or the title attribute is empty',
+              relatedNodes: [ [length]: 0 ] },
+            { data: null,
+              id: 'role-presentation',
+              impact: 'moderate',
+              message: 'Element\'s default semantics were not overridden with role="presentation"',
+              relatedNodes: [ [length]: 0 ] },
+            { data: null,
+              id: 'role-none',
+              impact: 'moderate',
+              message: 'Element\'s default semantics were not overridden with role="none"',
+              relatedNodes: [ [length]: 0 ] },
+            [length]: 6 ],
+         html: '&lt;img src="/assets/demo-sites/mars/images/mars-spaceman.jpg" class="" width="210" height="120">',
+         impact: 'critical',
+         none: [ [length]: 0 ],
+         target:
+          [ '#vertical-carousel > .carousel > ul > li:nth-of-type(15) > a > img',
+            [length]: 1 ] },
+       [length]: 4 ],
+    tags:
+     [ 'cat.text-alternatives',
+       'wcag2a',
+       'wcag111',
+       'section508',
+       'section508.22.a',
+       [length]: 5 ] },
+  { description: 'Ensures every form element has a label',
+    help: 'Form elements must have labels',
+    helpUrl: 'https://dequeuniversity.com/rules/axe/2.2/label?application=webdriverjs',
+    id: 'label',
+    impact: 'critical',
+    nodes:
+     [ { all: [ [length]: 0 ],
+         any:
+          [ { data: null,
+              id: 'aria-label',
+              impact: 'critical',
+              message: 'aria-label attribute does not exist or is empty',
+              relatedNodes: [ [length]: 0 ] },
+            { data: null,
+              id: 'aria-labelledby',
+              impact: 'critical',
+              message: 'aria-labelledby attribute does not exist, references elements that do not exist or references elements that are empty or not visible',
+              relatedNodes: [ [length]: 0 ] },
+            { data: null,
+              id: 'implicit-label',
+              impact: 'critical',
+              message: 'Form element does not have an implicit (wrapped) &lt;label>',
+              relatedNodes: [ [length]: 0 ] },
+            { data: null,
+              id: 'explicit-label',
+              impact: 'critical',
+              message: 'Form element does not have an explicit &lt;label>',
+              relatedNodes: [ [length]: 0 ] },
+            { data: null,
+              id: 'non-empty-title',
+              impact: 'critical',
+              message: 'Element has no title attribute or the title attribute is empty',
+              relatedNodes: [ [length]: 0 ] },
+            [length]: 5 ],
+         html: '&lt;input type="text" class="search" name="query" placeholder="search">',
+         impact: 'critical',
+         none: [ [length]: 0 ],
+         target:
+          [ '.js.no-flexbox.flexbox-legacy.canvas.canvastext.webgl.no-touch.geolocation.postmessage.websqldatabase.indexeddb.hashchange.history.draganddrop.websockets.rgba.hsla.multiplebgs.backgroundsize.borderimage.borderradius.boxshadow.textshadow.opacity.cssanimations.csscolumns.cssgradients.cssreflections.csstransforms.csstransforms3d.csstransitions.fontface.generatedcontent.video.audio.localstorage.sessionstorage.webworkers.applicationcache.svg.inlinesvg.smil.svgclippaths.js.no-flexbox.flexbox-legacy.canvas.canvastext.webgl.no-touch.geolocation.postmessage.websqldatabase.indexeddb.hashchange.history.draganddrop.websockets.rgba.hsla.multiplebgs.backgroundsize.borderimage.borderradius.boxshadow.textshadow.opacity.cssanimations.csscolumns.cssgradients.cssreflections.csstransforms.csstransforms3d.csstransitions.fontface.generatedcontent.video.audio.localstorage.sessionstorage.webworkers.applicationcache.svg.inlinesvg.smil.svgclippaths.deque-axe-is-ready > .public-en > .loginnow > .container-fluid-full > .container > .span5.left-first.pull-left > div > form > .search',
+            [length]: 1 ] },
+       { all: [ [length]: 0 ],
+         any:
+          [ { data: null,
+              id: 'aria-label',
+              impact: 'critical',
+              message: 'aria-label attribute does not exist or is empty',
+              relatedNodes: [ [length]: 0 ] },
+            { data: null,
+              id: 'aria-labelledby',
+              impact: 'critical',
+              message: 'aria-labelledby attribute does not exist, references elements that do not exist or references elements that are empty or not visible',
+              relatedNodes: [ [length]: 0 ] },
+            { data: null,
+              id: 'implicit-label',
+              impact: 'critical',
+              message: 'Form element does not have an implicit (wrapped) &lt;label>',
+              relatedNodes: [ [length]: 0 ] },
+            { data: null,
+              id: 'explicit-label',
+              impact: 'critical',
+              message: 'Form element does not have an explicit &lt;label>',
+              relatedNodes: [ [length]: 0 ] },
+            { data: null,
+              id: 'non-empty-title',
+              impact: 'critical',
+              message: 'Element has no title attribute or the title attribute is empty',
+              relatedNodes: [ [length]: 0 ] },
+            [length]: 5 ],
+         html: '&lt;select name="time0" id="time0" class="select-time" tabindex="4">',
+         impact: 'critical',
+         none: [ [length]: 0 ],
+         target: [ '#time0', [length]: 1 ] },
+       { all: [ [length]: 0 ],
+         any:
+          [ { data: null,
+              id: 'aria-label',
+              impact: 'critical',
+              message: 'aria-label attribute does not exist or is empty',
+              relatedNodes: [ [length]: 0 ] },
+            { data: null,
+              id: 'aria-labelledby',
+              impact: 'critical',
+              message: 'aria-labelledby attribute does not exist, references elements that do not exist or references elements that are empty or not visible',
+              relatedNodes: [ [length]: 0 ] },
+            { data: null,
+              id: 'implicit-label',
+              impact: 'critical',
+              message: 'Form element does not have an implicit (wrapped) &lt;label>',
+              relatedNodes: [ [length]: 0 ] },
+            { data: null,
+              id: 'explicit-label',
+              impact: 'critical',
+              message: 'Form element does not have an explicit &lt;label>',
+              relatedNodes: [ [length]: 0 ] },
+            { data: null,
+              id: 'non-empty-title',
+              impact: 'critical',
+              message: 'Element has no title attribute or the title attribute is empty',
+              relatedNodes: [ [length]: 0 ] },
+            [length]: 5 ],
+         html: '&lt;select id="traveler0" class="traveler-type">\n\t\t\t\t\t\t\t\t\t\t&lt;option value="0">Adult (26+)&lt;/option>\n\t\t\t\t\t\t\t\t\t\t&lt;option value="1">Youth (12-25)&lt;/option>\n\t\t\t\t\t\t\t\t\t\t&lt;option value="2">Child (4-11)&lt;/option>\n\t\t\t\t\t\t\t\t\t\t&lt;option value="3">Senior (60+)&lt;/option>\n\t\t\t\t\t\t\t\t\t&lt;/select>',
+         impact: 'critical',
+         none: [ [length]: 0 ],
+         target:
+          [ '#passenger0 > .wrapper.age-range > .traveler-type',
+            [length]: 1 ] },
+       [length]: 3 ],
+    tags:
+     [ 'cat.forms',
+       'wcag2a',
+       'wcag332',
+       'wcag131',
+       'section508',
+       'section508.22.n',
+       [length]: 6 ] },
+  { description: 'Ensures links have discernible text',
+    help: 'Links must have discernible text',
+    helpUrl: 'https://dequeuniversity.com/rules/axe/2.2/link-name?application=webdriverjs',
+    id: 'link-name',
+    impact: 'critical',
+    nodes:
+     [ { all: [ [length]: 0 ],
+         any:
+          [ { data: null,
+              id: 'has-visible-text',
+              impact: 'moderate',
+              message: 'Element does not have text that is visible to screen readers',
+              relatedNodes: [ [length]: 0 ] },
+            { data: null,
+              id: 'aria-label',
+              impact: 'critical',
+              message: 'aria-label attribute does not exist or is empty',
+              relatedNodes: [ [length]: 0 ] },
+            { data: null,
+              id: 'aria-labelledby',
+              impact: 'critical',
+              message: 'aria-labelledby attribute does not exist, references elements that do not exist or references elements that are empty or not visible',
+              relatedNodes: [ [length]: 0 ] },
+            { data: null,
+              id: 'role-presentation',
+              impact: 'moderate',
+              message: 'Element\'s default semantics were not overridden with role="presentation"',
+              relatedNodes: [ [length]: 0 ] },
+            { data: null,
+              id: 'role-none',
+              impact: 'moderate',
+              message: 'Element\'s default semantics were not overridden with role="none"',
+              relatedNodes: [ [length]: 0 ] },
+            [length]: 5 ],
+         html: '&lt;a class="link" href="demo/mars/#">&lt;i class="icon-menu-home">&lt;/i> &lt;/a>',
+         impact: 'critical',
+         none:
+          [ { data: null,
+              id: 'focusable-no-name',
+              impact: 'serious',
+              message: 'Element is in tab order and does not have accessible text',
+              relatedNodes: [ [length]: 0 ] },
+            [length]: 1 ],
+         target: [ '#main-nav > ul > .first > .link', [length]: 1 ] },
+       { all: [ [length]: 0 ],
+         any:
+          [ { data: null,
+              id: 'has-visible-text',
+              impact: 'moderate',
+              message: 'Element does not have text that is visible to screen readers',
+              relatedNodes: [ [length]: 0 ] },
+            { data: null,
+              id: 'aria-label',
+              impact: 'critical',
+              message: 'aria-label attribute does not exist or is empty',
+              relatedNodes: [ [length]: 0 ] },
+            { data: null,
+              id: 'aria-labelledby',
+              impact: 'critical',
+              message: 'aria-labelledby attribute does not exist, references elements that do not exist or references elements that are empty or not visible',
+              relatedNodes: [ [length]: 0 ] },
+            { data: null,
+              id: 'role-presentation',
+              impact: 'moderate',
+              message: 'Element\'s default semantics were not overridden with role="presentation"',
+              relatedNodes: [ [length]: 0 ] },
+            { data: null,
+              id: 'role-none',
+              impact: 'moderate',
+              message: 'Element\'s default semantics were not overridden with role="none"',
+              relatedNodes: [ [length]: 0 ] },
+            [length]: 5 ],
+         html: '&lt;a href="/demo/mars/mars2?a=crater_adventure">\n\t\t             &lt;img src="/assets/demo-sites/mars/images/mars-spaceman.jpg" class="" width="210" height="120">&lt;/a>',
+         impact: 'critical',
+         none:
+          [ { data: null,
+              id: 'focusable-no-name',
+              impact: 'serious',
+              message: 'Element is in tab order and does not have accessible text',
+              relatedNodes: [ [length]: 0 ] },
+            [length]: 1 ],
+         target:
+          [ '#vertical-carousel > .carousel > ul > li:nth-of-type(1) > a',
+            [length]: 1 ] },
+       { all: [ [length]: 0 ],
+         any:
+          [ { data: null,
+              id: 'has-visible-text',
+              impact: 'moderate',
+              message: 'Element does not have text that is visible to screen readers',
+              relatedNodes: [ [length]: 0 ] },
+            { data: null,
+              id: 'aria-label',
+              impact: 'critical',
+              message: 'aria-label attribute does not exist or is empty',
+              relatedNodes: [ [length]: 0 ] },
+            { data: null,
+              id: 'aria-labelledby',
+              impact: 'critical',
+              message: 'aria-labelledby attribute does not exist, references elements that do not exist or references elements that are empty or not visible',
+              relatedNodes: [ [length]: 0 ] },
+            { data: null,
+              id: 'role-presentation',
+              impact: 'moderate',
+              message: 'Element\'s default semantics were not overridden with role="presentation"',
+              relatedNodes: [ [length]: 0 ] },
+            { data: null,
+              id: 'role-none',
+              impact: 'moderate',
+              message: 'Element\'s default semantics were not overridden with role="none"',
+              relatedNodes: [ [length]: 0 ] },
+            [length]: 5 ],
+         html: '&lt;a href="/demo/mars/mars2?a=crater_adventure">\n\t\t             &lt;img src="/assets/demo-sites/mars/images/mars-spaceman.jpg" class="" width="210" height="120">&lt;/a>',
+         impact: 'critical',
+         none:
+          [ { data: null,
+              id: 'focusable-no-name',
+              impact: 'serious',
+              message: 'Element is in tab order and does not have accessible text',
+              relatedNodes: [ [length]: 0 ] },
+            [length]: 1 ],
+         target:
+          [ '#vertical-carousel > .carousel > ul > li:nth-of-type(8) > a',
+            [length]: 1 ] },
+       { all: [ [length]: 0 ],
+         any:
+          [ { data: null,
+              id: 'has-visible-text',
+              impact: 'moderate',
+              message: 'Element does not have text that is visible to screen readers',
+              relatedNodes: [ [length]: 0 ] },
+            { data: null,
+              id: 'aria-label',
+              impact: 'critical',
+              message: 'aria-label attribute does not exist or is empty',
+              relatedNodes: [ [length]: 0 ] },
+            { data: null,
+              id: 'aria-labelledby',
+              impact: 'critical',
+              message: 'aria-labelledby attribute does not exist, references elements that do not exist or references elements that are empty or not visible',
+              relatedNodes: [ [length]: 0 ] },
+            { data: null,
+              id: 'role-presentation',
+              impact: 'moderate',
+              message: 'Element\'s default semantics were not overridden with role="presentation"',
+              relatedNodes: [ [length]: 0 ] },
+            { data: null,
+              id: 'role-none',
+              impact: 'moderate',
+              message: 'Element\'s default semantics were not overridden with role="none"',
+              relatedNodes: [ [length]: 0 ] },
+            [length]: 5 ],
+         html: '&lt;a href="/demo/mars/mars2?a=crater_adventure">\n\t\t             &lt;img src="/assets/demo-sites/mars/images/mars-spaceman.jpg" class="" width="210" height="120">&lt;/a>',
+         impact: 'critical',
+         none:
+          [ { data: null,
+              id: 'focusable-no-name',
+              impact: 'serious',
+              message: 'Element is in tab order and does not have accessible text',
+              relatedNodes: [ [length]: 0 ] },
+            [length]: 1 ],
+         target:
+          [ '#vertical-carousel > .carousel > ul > li:nth-of-type(15) > a',
+            [length]: 1 ] },
+       { all: [ [length]: 0 ],
+         any:
+          [ { data: null,
+              id: 'has-visible-text',
+              impact: 'moderate',
+              message: 'Element does not have text that is visible to screen readers',
+              relatedNodes: [ [length]: 0 ] },
+            { data: null,
+              id: 'aria-label',
+              impact: 'critical',
+              message: 'aria-label attribute does not exist or is empty',
+              relatedNodes: [ [length]: 0 ] },
+            { data: null,
+              id: 'aria-labelledby',
+              impact: 'critical',
+              message: 'aria-labelledby attribute does not exist, references elements that do not exist or references elements that are empty or not visible',
+              relatedNodes: [ [length]: 0 ] },
+            { data: null,
+              id: 'role-presentation',
+              impact: 'moderate',
+              message: 'Element\'s default semantics were not overridden with role="presentation"',
+              relatedNodes: [ [length]: 0 ] },
+            { data: null,
+              id: 'role-none',
+              impact: 'moderate',
+              message: 'Element\'s default semantics were not overridden with role="none"',
+              relatedNodes: [ [length]: 0 ] },
+            [length]: 5 ],
+         html: '&lt;a href="/demo/mars/mars2?a=">&lt;/a>',
+         impact: 'critical',
+         none:
+          [ { data: null,
+              id: 'focusable-no-name',
+              impact: 'serious',
+              message: 'Element is in tab order and does not have accessible text',
+              relatedNodes: [ [length]: 0 ] },
+            [length]: 1 ],
+         target:
+          [ '#form1 > div:nth-of-type(2) > .interior-container > .re_ajax_p3 > a',
+            [length]: 1 ] },
+       { all: [ [length]: 0 ],
+         any:
+          [ { data: null,
+              id: 'has-visible-text',
+              impact: 'moderate',
+              message: 'Element does not have text that is visible to screen readers',
+              relatedNodes: [ [length]: 0 ] },
+            { data: null,
+              id: 'aria-label',
+              impact: 'critical',
+              message: 'aria-label attribute does not exist or is empty',
+              relatedNodes: [ [length]: 0 ] },
+            { data: null,
+              id: 'aria-labelledby',
+              impact: 'critical',
+              message: 'aria-labelledby attribute does not exist, references elements that do not exist or references elements that are empty or not visible',
+              relatedNodes: [ [length]: 0 ] },
+            { data: null,
+              id: 'role-presentation',
+              impact: 'moderate',
+              message: 'Element\'s default semantics were not overridden with role="presentation"',
+              relatedNodes: [ [length]: 0 ] },
+            { data: null,
+              id: 'role-none',
+              impact: 'moderate',
+              message: 'Element\'s default semantics were not overridden with role="none"',
+              relatedNodes: [ [length]: 0 ] },
+            [length]: 5 ],
+         html: '&lt;a target="player" data-text="Life was possible on Mars" class="fader first active" href="http://www.youtube.com/embed/OagLGti_hTE?controls=1&amp;showinfo=1&amp;modestbranding=0&amp;wmode=opaque&amp;enablejsapi=1" id="default">&lt;/a>',
+         impact: 'critical',
+         none:
+          [ { data: null,
+              id: 'focusable-no-name',
+              impact: 'serious',
+              message: 'Element is in tab order and does not have accessible text',
+              relatedNodes: [ [length]: 0 ] },
+            [length]: 1 ],
+         target:
+          [ '#video-box > .interior-container > .vid-nav > .fader.first.active',
+            [length]: 1 ] },
+       { all: [ [length]: 0 ],
+         any:
+          [ { data: null,
+              id: 'has-visible-text',
+              impact: 'moderate',
+              message: 'Element does not have text that is visible to screen readers',
+              relatedNodes: [ [length]: 0 ] },
+            { data: null,
+              id: 'aria-label',
+              impact: 'critical',
+              message: 'aria-label attribute does not exist or is empty',
+              relatedNodes: [ [length]: 0 ] },
+            { data: null,
+              id: 'aria-labelledby',
+              impact: 'critical',
+              message: 'aria-labelledby attribute does not exist, references elements that do not exist or references elements that are empty or not visible',
+              relatedNodes: [ [length]: 0 ] },
+            { data: null,
+              id: 'role-presentation',
+              impact: 'moderate',
+              message: 'Element\'s default semantics were not overridden with role="presentation"',
+              relatedNodes: [ [length]: 0 ] },
+            { data: null,
+              id: 'role-none',
+              impact: 'moderate',
+              message: 'Element\'s default semantics were not overridden with role="none"',
+              relatedNodes: [ [length]: 0 ] },
+            [length]: 5 ],
+         html: '&lt;a target="player" data-text="Why Mars died" class="fader first" href="http://www.youtube.com/embed/oC31pqk9sak?controls=1&amp;showinfo=1&amp;modestbranding=0&amp;wmode=opaque&amp;enablejsapi=1" id="default">&lt;/a>',
+         impact: 'critical',
+         none:
+          [ { data: null,
+              id: 'focusable-no-name',
+              impact: 'serious',
+              message: 'Element is in tab order and does not have accessible text',
+              relatedNodes: [ [length]: 0 ] },
+            [length]: 1 ],
+         target:
+          [ '#video-box > .interior-container > .vid-nav > a:nth-of-type(2)',
+            [length]: 1 ] },
+       { all: [ [length]: 0 ],
+         any:
+          [ { data: null,
+              id: 'has-visible-text',
+              impact: 'moderate',
+              message: 'Element does not have text that is visible to screen readers',
+              relatedNodes: [ [length]: 0 ] },
+            { data: null,
+              id: 'aria-label',
+              impact: 'critical',
+              message: 'aria-label attribute does not exist or is empty',
+              relatedNodes: [ [length]: 0 ] },
+            { data: null,
+              id: 'aria-labelledby',
+              impact: 'critical',
+              message: 'aria-labelledby attribute does not exist, references elements that do not exist or references elements that are empty or not visible',
+              relatedNodes: [ [length]: 0 ] },
+            { data: null,
+              id: 'role-presentation',
+              impact: 'moderate',
+              message: 'Element\'s default semantics were not overridden with role="presentation"',
+              relatedNodes: [ [length]: 0 ] },
+            { data: null,
+              id: 'role-none',
+              impact: 'moderate',
+              message: 'Element\'s default semantics were not overridden with role="none"',
+              relatedNodes: [ [length]: 0 ] },
+            [length]: 5 ],
+         html: '&lt;a target="player" data-text="The world that never was" class="fader first" href="http://www.youtube.com/embed/JgMXPXdqJn8?controls=1&amp;showinfo=1&amp;modestbranding=0&amp;wmode=opaque&amp;enablejsapi=1" id="default">&lt;/a>',
+         impact: 'critical',
+         none:
+          [ { data: null,
+              id: 'focusable-no-name',
+              impact: 'serious',
+              message: 'Element is in tab order and does not have accessible text',
+              relatedNodes: [ [length]: 0 ] },
+            [length]: 1 ],
+         target:
+          [ '#video-box > .interior-container > .vid-nav > a:nth-of-type(3)',
+            [length]: 1 ] },
+       [length]: 8 ],
+    tags:
+     [ 'cat.name-role-value',
+       'wcag2a',
+       'wcag111',
+       'wcag412',
+       'section508',
+       'section508.22.a',
+       [length]: 6 ] },
+  { description: 'Ensures related &lt;input type="radio"> elements have a group and that the group designation is consistent',
+    help: 'Radio inputs with the same name attribute value must be part of a group',
+    helpUrl: 'https://dequeuniversity.com/rules/axe/2.2/radiogroup?application=webdriverjs',
+    id: 'radiogroup',
+    impact: 'critical',
+    nodes:
+     [ { all: [ [length]: 0 ],
+         any:
+          [ { data: { name: 'widget-type', type: 'radio' },
+              id: 'group-labelledby',
+              impact: 'critical',
+              message: 'All elements with the name "widget-type" do not reference the same element with aria-labelledby',
+              relatedNodes: [ [length]: 0 ] },
+            { data: { failureCode: 'no-legend', name: 'widget-type', type: 'radio' },
+              id: 'fieldset',
+              impact: 'critical',
+              message: 'Fieldset does not have a legend as its first child',
+              relatedNodes:
+               [ { html: '&lt;fieldset>',
+                   target:
+                    [ '#widget-controls > .interior-container > form > fieldset',
+                      [length]: 1 ] },
+                 [length]: 1 ] },
+            [length]: 2 ],
+         html: '&lt;input type="radio" name="widget-type" id="widget-controls-fares" value="0" checked="checked">',
+         impact: 'critical',
+         none: [ [length]: 0 ],
+         target: [ '#widget-controls-fares', [length]: 1 ] },
+       { all: [ [length]: 0 ],
+         any:
+          [ { data: { name: 'route-type', type: 'radio' },
+              id: 'group-labelledby',
+              impact: 'critical',
+              message: 'All elements with the name "route-type" do not reference the same element with aria-labelledby',
+              relatedNodes: [ [length]: 0 ] },
+            { data: { failureCode: 'no-group', name: 'route-type', type: 'radio' },
+              id: 'fieldset',
+              impact: 'critical',
+              message: 'Element does not have a containing fieldset or ARIA group',
+              relatedNodes:
+               [ { html: '&lt;input type="radio" name="route-type" id="route-type-round-trip" value="1">',
+                   target: [ '#route-type-round-trip', [length]: 1 ] },
+                 { html: '&lt;input type="radio" name="route-type" id="route-type-multi-city" value="2">',
+                   target: [ '#route-type-multi-city', [length]: 1 ] },
+                 [length]: 2 ] },
+            [length]: 2 ],
+         html: '&lt;input type="radio" name="route-type" id="route-type-one-way" value="0" checked="checked">',
+         impact: 'critical',
+         none: [ [length]: 0 ],
+         target: [ '#route-type-one-way', [length]: 1 ] },
+       { all: [ [length]: 0 ],
+         any:
+          [ { data: { name: 'pass-question-radio', type: 'radio' },
+              id: 'group-labelledby',
+              impact: 'critical',
+              message: 'All elements with the name "pass-question-radio" do not reference the same element with aria-labelledby',
+              relatedNodes: [ [length]: 0 ] },
+            { data:
+               { failureCode: 'no-group',
+                 name: 'pass-question-radio',
+                 type: 'radio' },
+              id: 'fieldset',
+              impact: 'critical',
+              message: 'Element does not have a containing fieldset or ARIA group',
+              relatedNodes:
+               [ { html: '&lt;input type="radio" name="pass-question-radio" id="pass-question-no" value="1" checked="checked">',
+                   target: [ '#pass-question-no', [length]: 1 ] },
+                 [length]: 1 ] },
+            [length]: 2 ],
+         html: '&lt;input type="radio" name="pass-question-radio" id="pass-question-yes" value="0">',
+         impact: 'critical',
+         none: [ [length]: 0 ],
+         target: [ '#pass-question-yes', [length]: 1 ] },
+       [length]: 3 ],
+    tags: [ 'cat.forms', 'best-practice', [length]: 2 ] },
+  { description: 'Ensures tabindex attribute values are not greater than 0',
+    help: 'Elements should not have tabindex greater than zero',
+    helpUrl: 'https://dequeuniversity.com/rules/axe/2.2/tabindex?application=webdriverjs',
+    id: 'tabindex',
+    impact: 'serious',
+    nodes:
+     [ { all: [ [length]: 0 ],
+         any:
+          [ { data: null,
+              id: 'tabindex',
+              impact: 'serious',
+              message: 'Element has a tabindex greater than 0',
+              relatedNodes: [ [length]: 0 ] },
+            [length]: 1 ],
+         html: '&lt;input type="text" value="" class="city-input ac_input ui-autocomplete-input" autocomplete="off" id="from0" name="from0" tabindex="1" role="textbox" aria-autocomplete="list" aria-haspopup="true">',
+         impact: 'serious',
+         none: [ [length]: 0 ],
+         target: [ '#from0', [length]: 1 ] },
+       { all: [ [length]: 0 ],
+         any:
+          [ { data: null,
+              id: 'tabindex',
+              impact: 'serious',
+              message: 'Element has a tabindex greater than 0',
+              relatedNodes: [ [length]: 0 ] },
+            [length]: 1 ],
+         html: '&lt;input type="text" value="" class="city-input ac_input ui-autocomplete-input" autocomplete="off" id="to0" name="to0" tabindex="1" role="textbox" aria-autocomplete="list" aria-haspopup="true">',
+         impact: 'serious',
+         none: [ [length]: 0 ],
+         target: [ '#to0', [length]: 1 ] },
+       { all: [ [length]: 0 ],
+         any:
+          [ { data: null,
+              id: 'tabindex',
+              impact: 'serious',
+              message: 'Element has a tabindex greater than 0',
+              relatedNodes: [ [length]: 0 ] },
+            [length]: 1 ],
+         html: '&lt;input size="10" id="deptDate0" name="deptDate0" placeholder="mm/dd/yyyy" value="" tabindex="3" class="hasDatepicker input-dept">',
+         impact: 'serious',
+         none: [ [length]: 0 ],
+         target: [ '#deptDate0', [length]: 1 ] },
+       { all: [ [length]: 0 ],
+         any:
+          [ { data: null,
+              id: 'tabindex',
+              impact: 'serious',
+              message: 'Element has a tabindex greater than 0',
+              relatedNodes: [ [length]: 0 ] },
+            [length]: 1 ],
+         html: '&lt;select name="time0" id="time0" class="select-time" tabindex="4">',
+         impact: 'serious',
+         none: [ [length]: 0 ],
+         target: [ '#time0', [length]: 1 ] },
+       [length]: 4 ],
+    tags: [ 'cat.keyboard', 'best-practice', [length]: 2 ] },
+  [length]: 10 ]
+					</code></pre>
+					</figure>
+				</section>
+
+				<section>
+					<h2 class="fancy" style="margin-bottom:0;">Continuous Integration</h2>
+					<figure><img data-src="img/continuous-integration.jpg" alt="Continuous integration diagram" class="plain" style="max-height: 500px;">
+					<figcaption><small><a href="https://insights.sei.cmu.edu/devops/2015/01/continuous-integration-in-devops-1.html">Source: Carnegie Mellon</a></small></figcaption>
+				</section>
+
+				<section>
+					<h2>Common CI Solutions</h2>
+					<div class="hr inset"><hr></div>
+					<ul class="logos">
+						<li><img data-src="img/circleci-logo.svg" alt="Circle CI" width="400px;"></li>
+						<li style="padding: 1em 1em;"><img data-src="img/TravisCI-logo.png" alt="Travis CI" width="400px"></li>
+						<li><img data-src="img/jenkins-logo.png" alt="Jenkins" width="600px;"></li>
+					</ul>
+				</section>
+
+				<section data-background-image="img/axe-webdriverjs-pr-checks.jpg" data-background-position="center top" data-background-size="contain">
+					<h2 class="offscreen">axe-webdriverjs on Github: Travis CI checks along with license/CLA and security/snyk</h2>
+				</section>
+
+				<section>
+					<h2 class="fancy h1-style">Hosted CI in a Nutshell 🌰</h2>
+					<ul class="larger">
+						<li>Write code &amp; tests</li>
+						<li>Add integration to Git repo</li>
+						<li>Enable CI builds for the project</li>
+						<li>Push code</li>
+					</ul>
+				</section>
+
+				<section>
+					<div class="left-align snug">
+						<h2 class="fancy">Circle CI Configuration File</h2>
+						<p><a href="https://circleci.com/docs/1.0/configuration/">https://circleci.com/docs/1.0/configuration/</a></p>
+					</div>
+					<figure class="code">
+						<figcaption style="padding-left: 2.2em">circle.yml (overrides defaults)</figcaption>
+						<pre><code class="yaml">
+  machine:
+    node:
+      version: v6.1.0
+
+  deployment:
+    production:
+      branch: production
+      commands:
+        - ./deploy_prod.sh
+						</code></pre>
+					</figure>
+				</section>
+
+				<section>
+					<div class="left-align snug">
+						<h2 class="fancy">Travis CI Configuration File</h2>
+						<p><a href="https://docs.travis-ci.com/user/customizing-the-build">https://docs.travis-ci.com/user/customizing-the-build</a></p>
+					</div>
+					<figure class="code">
+						<figcaption style="padding-left: 2.2em">travis.yml (overrides defaults)</figcaption>
+						<pre><code class="yaml">
+  language: node_js
+    node_js:
+      - 6.1.0
+  deploy:
+    provider: script
+    script: scripts/deploy.sh
+    on:
+      branch: production
+						</code></pre>
+					</figure>
+				</section>
+
+				<section>
+					<h2 class="h1-style fancy">How does CI help for a11y?</h2>
+					<ul class="larger">
+						<li>Test more platforms</li>
+						<li>Prevent regressions</li>
+						<li>Encourage test coverage 👍</li>
+					</ul>
+					<aside class="notes">
+					Testing the UI ensures you don't break an a11y feature without realizing it. Catch bugs before they go to production.
+					</aside>
+				</section>
+
+				<section>
+					<h2 class="fancy">CI Testing Example</h2>
+					<div class="layeredFragments separated">
+						<figure>
+							<img data-src="img/ci-example/axe-jasmine-unit-github.png" alt="axe-jasmine-unit repository on Github" class="plain">
+						</figure>
+						<figure class="fragment">
+							<img data-src="img/ci-example/axe-jasmine-unit-package-json.png" alt="axe-jasmine-unit package.json file in Sublime Text" class="plain">
+						</figure>
+						<figure class="fragment">
+							<img data-src="img/ci-example/axe-jasmine-unit-gruntfile.png" alt="axe-jasmine-unit Grunt file in Sublime Text" class="plain">
+						</figure>
+						<figure class="fragment">
+							<img data-src="img/ci-example/axe-jasmine-unit-test.png" alt="axe-jasmine-unit test in Sublime Text" class="plain">
+						</figure>
+						<figure class="fragment">
+							<img data-src="img/ci-example/axe-jasmine-unit-add-service.png" alt="Adding Circle from list of services to axe-jasmine-unit on Github" class="plain">
+						</figure>
+						<figure class="fragment">
+							<img data-src="img/ci-example/axe-jasmine-unit-add-circle.png" alt="Adding Circle integration to axe-jasmine-unit on Github" class="plain">
+						</figure>
+						<figure class="fragment">
+							<img data-src="img/ci-example/axe-jasmine-unit-integrations-installed.png" alt="Cirlce integration installed for axe-jasmine-unit on Github" class="plain">
+						</figure>
+						<figure class="fragment">
+							<img data-src="img/ci-example/axe-jasmine-unit-add-projects-circle.png" alt="Projects list on Circle including axe-jasmine-unit" class="plain">
+						</figure>
+						<figure class="fragment">
+							<img data-src="img/ci-example/axe-jasmine-unit-circle-success.png" alt="axe-jasmine-unit successful build on Circle CI" class="plain">
+						</figure>
+						<figure class="fragment">
+							<img data-src="img/circle-tests-passing.png" alt="axe-core builds in Circle CI" class="plain">
+						</figure>
+					</div>
+				</section>
+
+				<section data-state="has-footer">
+					<h2>CI Gotchas</h2>
+					<figure>
+						<img data-src="img/GOTCHA.gif" alt="Leslie Knope getting got" style="min-width: 600px;">
+					</figure>
+					<aside class="notes">
+					<ul>
+						<li>Env Vars</li>
+						<li>Error handling</li>
+						<li>Browser drivers</li>
+					</ul>
+					</aside>
+				</section>
+
+				<section>
+				<div class="left-align snug">
+					<h2 class="fancy">If you see this:</h2>
+					<h3>Check the Node.js version</h3>
+				</div>
+					<figure class="code">
+					<pre><code class="bash">
+Running "parallel:browser-test" (parallel) task
+
+    >> Loading "test-webdriver.js" tasks...ERROR
+    >> >> SyntaxError: Unexpected token ...
+    >> Warning: Task "test-webdriver:firefox" not found. Use --force to continue.
+    >> 
+    >> Aborted due to warnings.
+    Warning: Task "parallel:browser-test" failed. Use --force to continue.
+
+Aborted due to warnings.
+
+grunt test returned exit code 3
+					</code></pre>
+					<figcaption>Breaking on spread syntax</figcaption>
+					</figcaption>
+					</figure>
+				</section>
+
+				<section>
+				<div class="left-align snug">
+					<h2 class="fancy">If you see this:</h2>
+					<h3>Try to reproduce locally, debug with logging</h3>
+				</div>
+					<figure class="code">
+					<pre><code class="bash">
+  color-contrast sticky header test violations
+
+TypeError: undefined is not an object (evaluating 'datum.reason')
+
+  0 passing (107ms)
+  1 failing
+
+  1) color-contrast sticky header test violations should find none:
+     Uncaught 
+...
+
+>> 1/90 tests failed (3.39s)
+Warning: Task "mocha:integration" failed. Use --force to continue.
+
+Aborted due to warnings.
+					</code></pre>
+					</figcaption>
+					</figure>
+				</section>
+
+				<section>
+				<div class="left-align snug">
+					<h2 class="fancy">CI debugging tips</h2>
+				</div>
+					<figure class="code">
+					<figcaption>Enable logging</figcaption>
+					<pre><code class="javascript">  mocha: {
+    test: {
+      options: {
+        logErrors: true,
+      }
+    }
+  }
+ 					</code></pre>
+					</figure>
+					<figure class="code">
+					<figcaption>Wrap failing code in a try/catch</figcaption>
+					<pre><code class="javascript">  try {
+    // Your new failing code here
+  }
+  catch (e) {
+    console.log(e)
+  }</code></pre>
+					</figcaption>
+					</figure>
+				</section>
+
+				<section>
+					<h2 class="fancy">Tracking who broke the build</h2>
+					<figure>
+						<figcaption><a href="https://twitter.com/zqxwzq/status/855354405490741249">https://twitter.com/zqxwzq/status/855354405490741249</a></figcaption>
+						<img data-src="img/ci-bandits.jpg" alt="A TV monitor with broken build bandits wanted for bounty">
+					</figure>
+				</section>
+
+				<section>
+					<h2>Get tests passing</h2>
+					<figure>
+						<img data-src="img/circle-axe-shadowdom-passing.png" alt="axe-core shadow dom tests passing on CircleCI">
+					</figure>
+				</section>
+
+				<section>
+					<h2>Yesss</h2>
+					<figure>
+						<img data-src="img/tests-passing.gif" alt="Kip from Napoleon Dynamite saying YES" style="min-width: 400px;">
+					</figure>
+				</section>
+
+				<section data-state="has-footer">
+					<h2 class="h1-style fancy">Recap</h2>
+					<ul>
+						<li>Automate 30-50% of a11y issues</li>
+						<li>Write a mix of unit &amp; integration tests</li>
+						<li>Expand platform coverage with CI</li>
+						<li>Watch out for gotchas!</li>
+						<li>Don’t forget manual a11y testing</li>
+					</ul>
+				</section>
+
+				<section data-background-color="#ffffff">
+					<h2 class="fancy">Thanks!</h2>
+					<h3 class="subhead"><a href="http://twitter.com/marcysutton">twitter.com/marcysutton</a></h3>
+					<h3 class="subhead"><a href="http://github.com/marcysutton">github.com/marcysutton</a></h3>
+					<img data-src="img/deque_logo_600p.jpg" alt="" style="width: 320px;">
+				</section>
+			</div>
+			<footer>
+			<p class="copyright">Automating Peace of Mind with A11y &amp; CI<br>
+			<a class="footer-link" href="http://bit.ly/a11y-and-ci">http://bit.ly/a11y-and-ci</a> <span aria-hidden="true">/</span> 
+			<a class="footer-link" href="http://twitter.com/marcysutton" target="_blank" title="Link opens in a new window">@marcysutton</a></p>
+			</footer>
+		</div>
+
+		<script src="lib/js/head.min.js"></script>
+		<script src="js/reveal.js"></script>
+		<script>
+
+			// Full list of configuration options available at:
+			// https://github.com/hakimel/reveal.js#configuration
+			Reveal.initialize({
+				height: '100%',
+		    width: '100%',
+		    margin: 0,
+				controls: true,
+				progress: true,
+				history: true,
+				center: true,
+
+		        keyboard: {
+		          13: 'next', // go to the next slide when the ENTER key is pressed
+		          27: function() {}/*, // do something custom when ESC is pressed
+		          37: null,
+		          39: null // don't do anything when SPACE is pressed (i.e. disable a reveal.js default binding)*/
+		        },
+
+				transition: 'slide', // none/fade/slide/convex/concave/zoom
+
+				// Optional reveal.js plugins
+				dependencies: [
+					{ src: 'lib/js/classList.js', condition: function() { return !document.body.classList; } },
+					{ src: 'plugin/markdown/marked.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+					{ src: 'plugin/markdown/markdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+					{ src: 'plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } },
+					{ src: 'plugin/zoom-js/zoom.js', async: true },
+					{ src: 'plugin/notes/notes.js', async: true },
+					{ src: 'plugin/accessibility-helpers/accessibility-helpers.js', async: true}
+				]
+			});
+
+		</script>
+
+	</body>
+</html>

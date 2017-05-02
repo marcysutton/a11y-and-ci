@@ -1,0 +1,67 @@
+/**
+ * White theme for reveal.js. This is the opposite of the 'black' theme.
+ *
+ * By Hakim El Hattab, http://hakim.se
+ */
+
+
+// Default mixins and settings -----------------
+@import "../template/mixins";
+@import "../template/settings";
+// ---------------------------------------------
+
+// Include theme-specific fonts
+// @import url(../../lib/font/source-sans-pro/source-sans-pro.css);
+@import 'https://fonts.googleapis.com/css?family=BioRhyme|Roboto';
+
+$dequeLogoColor: #00274d;
+$dequeBgColor: #BFC9D3;
+$accentColor: #8dc63f;
+
+// Override theme settings (see ../template/settings.scss)
+$backgroundColor: #fff;
+
+$mainColor: #222;
+$headingColor: #222;
+
+$codeBgColor: rgba(0, 0, 0, 0.04);
+$codeCaptionBgColor: $dequeBgColor;
+$codeCaptionColor: $mainColor;
+$colorBlockBG: lighten($dequeBgColor, 10%);
+
+$mutedColor: darken($dequeBgColor, 25%);
+
+$tablet: 'screen and (max-width: 1024px)';
+$mobile: 'screen and (max-width: 600px)';
+
+$mainFontSize: 38px;
+$mainFont: 'Roboto', Helvetica, sans-serif;
+$headingFont: 'BioRhyme', 'Times New Roman', serif;
+$headingTextShadow: none;
+$headingLetterSpacing: normal;
+$headingTextTransform: none;
+$headingFontWeight: 600;
+$linkColor: #0D6EF1;
+$linkColorHover: lighten( $linkColor, 15% );
+$selectionBackgroundColor: lighten( $linkColor, 5% );
+
+$wordCloudXLg: $linkColor;
+$wordCloudLg: #4c8ae0;
+$wordCloudSm: $mutedColor;
+$wordCloudXSm: darken($accentColor, 10%);
+
+$heading1Size: 2.25em;
+$heading2Size: 1.6em;
+$heading3Size: 1.3em;
+$heading4Size: 1.0em;
+
+section.has-dark-background {
+	&, h1, h2, h3, h4, h5, h6 {
+		color: #fff;
+	}
+}
+
+
+// Theme template ------------------------------
+@import "../template/theme";
+// ---------------------------------------------
