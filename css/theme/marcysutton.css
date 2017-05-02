@@ -671,6 +671,13 @@ body {
     letter-spacing: -0.0125em;
     color: #0D6EF1; }
 
+.reveal img.fullWidth {
+  box-shadow: none;
+  max-width: 100%;
+  border-width: 2px 0 0;
+  border-style: solid;
+  border-color: #dde3e8; }
+
 .reveal .layeredFragments {
   margin: 0 auto;
   min-height: 1000px;
