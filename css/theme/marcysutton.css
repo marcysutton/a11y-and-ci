@@ -766,10 +766,35 @@ body {
     margin: 0 auto;
     width: 90%; }
     .deque-title-slide .right h1 {
-      font-size: 1.5em;
+      font-size: 1em;
       text-align: center; }
     .deque-title-slide .right p {
-      font-size: 0.75em; } }
+      font-size: 0.5em; }
+    .deque-title-slide .right .hr, .deque-title-slide .right small {
+      display: none; } }
+
+@media screen and (max-width: 600px) {
+  .has-footer .reveal footer {
+    display: none !important; }
+  .reveal h1, .reveal .h1-style {
+    font-size: 1.25em; }
+  .reveal h2, .reveal .h2-style {
+    font-size: 1.15em; }
+  .reveal h3, .reveal .h3-style {
+    font-size: 1em; }
+  .reveal .subhead.larger {
+    font-size: 1em; }
+  .reveal ul.larger {
+    font-size: 1em; }
+  .reveal .list-rows {
+    max-width: 100%; }
+    .reveal .list-rows ul {
+      margin: 0; }
+  .reveal .list-siblings {
+    display: block;
+    padding-bottom: 0; }
+    .reveal .list-siblings > div {
+      padding: 0; } }
 
 #oh-hai-images {
   display: inline-block;
