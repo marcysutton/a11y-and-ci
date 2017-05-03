@@ -157,7 +157,7 @@
 								</ul>
 								<p><a href="https://github.com/dequelabs/axe-core">And more...</a></p>
 							</div>
-							<div class="fragment">
+							<div>
 								<h3>Manual</h3>
 								<ul>
 									<li>Focus order</li>
@@ -177,7 +177,7 @@
 				</section>
 
 				<section>
-					<h2 class="h1-style fancy">Web Accessibility Basics!</h2>
+					<h2 class="h1-style fancy">How are people affected?</h2>
 					<p><a href="http://webaim.org/intro/#people">http://webaim.org/intro/#people</a></p>
 					<ul class="larger">
 						<li>Visual</li>
@@ -185,19 +185,6 @@
 						<li>Motor</li>
 						<li>Cognitive</li>
 					</ul>
-				</section>
-
-				<section>
-					<h2 class="h1-style fancy">Users Need:</h2>
-					<ul>
-						<li>Text alternatives</li>
-						<li>Keyboard support</li>
-						<li>Color contrast</li>
-						<li>Semantic structure</li>
-						<li>Accessible forms</li>
-						<li>&hellip;and more!</li>
-					</ul>
-					<p><a href="https://marcysutton.com/web-accessibility-resources/">https://marcysutton.com/web-accessibility-resources/</a></p>
 				</section>
 
 				<section>
@@ -210,7 +197,9 @@
 
 				<section>
 					<h2 class="h1-style fancy">Why geek out over this?</h2>
-					<img data-src="img/dancing.gif" alt="Dancing in an elevator" style="min-width: 600px;">
+					<figure>
+						<img data-src="img/dancing.gif" alt="Dancing in an elevator" style="min-width: 600px;">
+					</figure>
 				</section>
 
 				<section>
@@ -477,7 +466,7 @@ describe('dialog', () => {
 
 				<section>
 					<div class="left-align snug">
-						<h2 class="h1-style fancy">Unit test with axe-core</h2>
+						<h2 class="fancy">Unit test with axe-core</h2>
 						<h3>Expect no violations in the aXe <code>results</code> object</h3>
 					</div>
 					<figure class="code">
@@ -501,10 +490,10 @@ describe('dialog', () => {
 
 				<section>
 					<div class="left-align snug">
-						<h2 class="fancy h1-style">Integration testing with aXe-webdriverjs</h2>
+						<h2 class="fancy">Integration test with aXe-webdriverjs</h2>
 					</div>
 					<figure class="code">
-						<figcaption style="padding-left: 2.2em;"><a href="https://github.com/marcysutton/axe-webdriverjs-demo">https://github.com/marcysutton/axe-webdriverjs-demo</a></figcaption>
+						<figcaption style="padding-left: 2.2em;"><a href="https://github.com/dequelabs/axe-webdriverjs">https://github.com/dequelabs/axe-webdriverjs</a></figcaption>
 				    <pre><code class="javascript">  var AxeBuilder = require('axe-webdriverjs'),
       WebDriver = require('selenium-webdriver');
  
@@ -2107,11 +2096,11 @@ Aborted due to warnings.
 				<section data-state="has-footer">
 					<h2 class="h1-style fancy">Recap</h2>
 					<ul>
-						<li>Automate 30-50% of a11y issues</li>
-						<li>Write a mix of unit &amp; integration tests</li>
-						<li>Expand platform coverage with CI</li>
+						<li>We can automate 30-50% of a11y issues.</li>
+						<li>Write a mix of unit &amp; integration tests.</li>
+						<li>Expand platform coverage with CI.</li>
 						<li>Watch out for gotchas!</li>
-						<li>Don’t forget manual a11y testing</li>
+						<li>Don’t forget manual a11y testing.</li>
 					</ul>
 				</section>
 
