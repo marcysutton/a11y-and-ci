@@ -440,6 +440,11 @@ body {
     border-width: 2px;
     color: #BFC9D3; }
 
+.reveal .border-top {
+  border-style: solid;
+  border-top-width: 2px;
+  color: #BFC9D3; }
+
 .reveal .strike {
   text-decoration: line-through; }
 
@@ -537,6 +542,8 @@ body {
   .reveal figure.support-table .group-end td {
     border-bottom: 0;
     padding-bottom: 1em; }
+  .reveal figure.support-table .group-end:last-of-type td {
+    padding-top: 1.25em; }
 
 .reveal figure.image-with-caption img {
   border: 2px solid #73899f;
@@ -593,6 +600,25 @@ body {
     font-size: 2.8em; }
   .reveal .left-align [aria-hidden="true"] {
     color: #73899f; }
+
+.reveal .thankYouScreen ul {
+  list-style: none;
+  margin: 0; }
+  .reveal .thankYouScreen ul li {
+    margin-top: 0.75em; }
+    .reveal .thankYouScreen ul li img {
+      display: inline-block;
+      height: 1.5em;
+      margin: 0 20px -20px 0;
+      width: 1.5em; }
+    .reveal .thankYouScreen ul li a {
+      color: #00274d;
+      text-decoration: underline; }
+
+.reveal .thankYouScreen > img {
+  display: block;
+  margin: 0 auto;
+  width: 320px; }
 
 .reveal li .twoThirdsCol {
   padding-top: 2%; }
@@ -698,7 +724,8 @@ body {
       position: absolute; }
 
 .reveal .logos {
-  margin-left: 0;
+  margin: 0 auto;
+  max-width: 1440px;
   text-align: center; }
   .reveal .logos li {
     display: inline-block;
@@ -799,23 +826,32 @@ body {
       padding: 0; } }
 
 #oh-hai-images {
+  box-sizing: border-box;
   display: inline-block;
   margin-top: 0em;
   text-align: center; }
   #oh-hai-images img, #oh-hai-images div {
+    box-sizing: border-box;
     vertical-align: middle; }
+  #oh-hai-images > img {
+    margin-left: 0.5em;
+    margin-right: 0.5em; }
   #oh-hai-images div {
     margin: 10px 0 0;
     text-align: center; }
-  #oh-hai-images .angular {
-    max-width: 300px; }
   #oh-hai-images .axe {
     background-color: #fff;
-    width: 400px; }
-  #oh-hai-images .gdi {
-    max-width: 250px; }
+    width: 500px; }
+  #oh-hai-images .a11ySea {
+    border-radius: 50%;
+    max-width: 28%; }
+  #oh-hai-images .gdi,
+  #oh-hai-images .egghead {
+    max-width: 28%; }
   #oh-hai-images .slack {
     max-width: 320px; }
+  #oh-hai-images .angular {
+    max-width: 300px; }
 
 .has-footer .reveal footer {
   display: block; }

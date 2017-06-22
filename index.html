@@ -44,7 +44,7 @@
 						<img src="img/deque-logo.png" alt="Deque" class="plain deque">
 					</div>
 					<div class="right">
-						<h1><span class="subhead">Automating peace of mind<br><span aria-hidden="true">with ~</span></span> Accessibility Testing &amp;<br> Continuous Integration</h1>
+						<h1><span class="subhead">Automating peace of mind<br><span>with</span></span> Accessibility Testing &amp;<br> Continuous Integration</h1>
 						<p>
 							By <a href="http://marcysutton.com">Marcy Sutton</a> / <a href="http://twitter.com/marcysutton">@MarcySutton</a><br>
 							Senior Front-End Engineer, Deque Systems
@@ -56,14 +56,19 @@
 
 				<section data-state="has-footer">
 					<h2>Who is Marcy Sutton?</h2>
-					<div id="oh-hai-images" class="border-top">
+					<div id="oh-hai-images" class="inset border-top">
 						<div>
 							<img data-src="img/axe-core.png" alt="axe-core" class="axe plain">
 						</div>
+						<img data-src="img/a11ySea.jpg" alt="Accessibility Seattle" class="a11ySea plain">
 						<img data-src="img/egghead-dot-io-logo.png" alt="Egghead.io" class="egghead plain">
 						<img data-src="img/gdi_logo_badge.png" alt="Girl Develop It" class="gdi plain">
-						<img data-src="img/angularjs-logo.png" alt="Angular" class="gdi plain">
+						<!-- <img data-src="img/angularjs-logo.png" alt="Angular" class="gdi plain"> -->
 					</div>
+				</section>
+
+				<section data-background-image="img/a11ywins.png" data-background-size="cover" data-background-position="top center">
+					<h2 style="font-family: monospace; margin-top: -300px;"><a href="https://a11ywins.tumblr.com">https://a11ywins.tumblr.com</a></h2>
 				</section>
 
 				<section data-background-color="#333" data-background-image="img/office-duo.jpg">
@@ -74,7 +79,7 @@
 					<div class="left-align">
 						<p class="subhead larger">What if:</p>
 						<h2 class="h1-style fancy" style="margin-top:0">
-							You just shipped a redesign making your website unusable to 15% of users 😮
+							You just shipped a redesign making your website unusable to 15-20% of users 😮
 						</h2>
 					</div>
 					<aside class="notes">
@@ -118,6 +123,13 @@
 				</section>
 
 				<section>
+					<h2 class="h1-style fancy">Why geek out over this?</h2>
+					<figure>
+						<img data-src="img/dancing.gif" alt="Dancing in an elevator" style="min-width: 600px;">
+					</figure>
+				</section>
+
+				<section>
 					<h2 class="fancy">Validating Code &amp; Covering Your Six</h2>
 					<div class="hr inset"><hr></div>
 					<div class="list-rows">
@@ -145,7 +157,7 @@
 						<h2 class="fancy">Accessibility Testing</h2>
 						<h3>a.k.a. cool stuff 🆒😎</h3>
 						<div class="list-siblings colorBlock">
-							<div>
+							<div class="fragment">
 								<h3>Automated</h3>
 								<ul>
 									<li>HTML/ARIA validation</li>
@@ -157,7 +169,7 @@
 								</ul>
 								<p><a href="https://github.com/dequelabs/axe-core">And more...</a></p>
 							</div>
-							<div>
+							<div class="fragment">
 								<h3>Manual</h3>
 								<ul>
 									<li>Focus order</li>
@@ -180,10 +192,10 @@
 					<h2 class="h1-style fancy">How are people affected?</h2>
 					<p><a href="http://webaim.org/intro/#people">http://webaim.org/intro/#people</a></p>
 					<ul class="larger">
-						<li>Visual</li>
-						<li>Hearing</li>
-						<li>Motor</li>
-						<li>Cognitive</li>
+						<li class="fragment">Visual</li>
+						<li class="fragment">Hearing</li>
+						<li class="fragment">Motor</li>
+						<li class="fragment">Cognitive</li>
 					</ul>
 				</section>
 
@@ -192,13 +204,6 @@
 					<p><a href="https://www.w3.org/TR/WCAG21/">https://www.w3.org/TR/WCAG21/</a></p>
 					<figure>
 						<img data-src="img/wcag21.png" alt="WCAG landing page" class="fullWidth">
-					</figure>
-				</section>
-
-				<section>
-					<h2 class="h1-style fancy">Why geek out over this?</h2>
-					<figure>
-						<img data-src="img/dancing.gif" alt="Dancing in an elevator" style="min-width: 600px;">
 					</figure>
 				</section>
 
@@ -227,10 +232,10 @@
 					<div class="fragment">
 						<h3 class="muted">Good for:</h3>
 						<ul class="larger">
-							<li>Component-specific behavior</li>
-							<li>Interaction/focus APIs</li>
-							<li>Text alternatives</li>
-							<li>ARIA states</li>
+							<li class="fragment">Component-specific behavior</li>
+							<li class="fragment">Interaction/focus APIs</li>
+							<li class="fragment">Text alternatives</li>
+							<li class="fragment">ARIA states</li>
 						</ul>
 					</div>
 					<aside class="notes">
@@ -277,11 +282,11 @@
 					<div class="fragment">
 						<h3 class="muted">Good for:</h3>
 						<ul class="larger">
-							<li>Real-world browser testing</li>
-							<li>Document/page-level rules</li>
-							<li>Widget interrop</li>
-							<li>Color contrast</li>
-							<li>Framework testing options</li>
+							<li class="fragment">Real-world browser testing</li>
+							<li class="fragment">Document/page-level rules</li>
+							<li class="fragment">Widget interrop</li>
+							<li class="fragment">Color contrast</li>
+							<li class="fragment">Framework testing options</li>
 						</ul>
 					</div>
 					<aside class="notes">
@@ -423,6 +428,65 @@ describe('dialog', () => {
 					</div>
 				</section>
 
+				<section data-background-image="img/angular2-test-strategies.png">
+					<h3 class="offscreen">Medium article by Victor Savkin: Three Ways to Test Angular 2 Components</h3>
+				</section>
+
+				<section>
+					<figure class="support-table">
+					<table>
+						<caption>
+							<h2 class="fancy">Test requirements for a11y</h2>
+						</caption>
+						<thead>
+							<tr>
+								<th scope="row">Test method</th>
+								<th scope="col">Rendered</th>
+								<th scope="col">Attached</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr>
+								<th colspan="3">Unit</th>
+							</tr>
+							<tr class="group-lead">
+								<td>Keyboard focus</td>
+								<td>X</td>
+								<td>X</td>
+							</tr>
+							<tr>
+								<td>Labeling</td>
+								<td></td>
+								<td></td>
+							</tr>
+							<tr class="group-end">
+								<td>ARIA attributes</td>
+								<td>~</td>
+								<td>~</td>
+							</tr>
+							<tr>
+								<th colspan="3">End-to-end</th>
+							</tr>
+							<tr class="group-lead">
+								<td>Color contrast</td>
+								<td>X</td>
+								<td>X</td>
+							</tr>
+							<tr>
+								<td>Event handlers</td>
+								<td>~</td>
+								<td>~</td>
+							</tr>
+							<tr class="group-end">
+								<td>Accessibility Test APIs</td>
+								<td>X</td>
+								<td>X</td>
+							</tr>
+						</tbody>
+					</table>
+					</figure>
+				</section>
+
 				<section>
 					<h2 class="h1-style fancy">Get help with an<br> Accessibility Testing API</h2>
 					<div>
@@ -450,6 +514,9 @@ describe('dialog', () => {
 							<img data-src="img/axe-core-npm.png" alt="axe-core on npm" style="max-width: 85%;">
 						</a>
 					</figure>
+					<aside class="notes">
+					There's also a brand-new Chrome extension!
+					</aside>
 				</section>
 
 				<section>
@@ -490,7 +557,7 @@ describe('dialog', () => {
 
 				<section>
 					<div class="left-align snug">
-						<h2 class="fancy">Integration test with aXe-webdriverjs</h2>
+						<h2 class="fancy">Integration test with aXe-WebdriverJS</h2>
 					</div>
 					<figure class="code">
 						<figcaption style="padding-left: 2.2em;"><a href="https://github.com/dequelabs/axe-webdriverjs">https://github.com/dequelabs/axe-webdriverjs</a></figcaption>
@@ -515,11 +582,32 @@ describe('dialog', () => {
 				</section>
 
 				<section>
-					<h2 class="h1-style fancy">Running tests locally</h2>
+					<div class="left-align snug">
+						<h2 class="fancy">Closer to the metal with aXe-CLI</h2>
+					</div>
+					<figure class="code">
+						<figcaption style="padding-left: 2.2em;"><a href="https://github.com/dequelabs/axe-cli">https://github.com/dequelabs/axe-cli</a></figcaption>
+						<pre><code class="shell">
+  $ npm install axe-cli -g
+
+  $ axe www.deque.com
+
+  $ axe www.deque.com --include #main --exclude #aside
+
+  $ axe www.deque.com --browser chrome
+
+  $ axe www.deque.com --rules color-contrast,html-has-lang
+
+  $ axe www.deque.com --save deque-site.json
+						</code></pre>
+					</figure>
+				</section>
+
+			<!-- 	<section>
+					<h2 class="h1-style fancy">axe-cli demo</h2>
 					<iframe src="http://127.0.0.1:3000/" width="1152" height="600" title="Command-line prompt">Feature only available in live demo</iframe>
 					<aside class="notes">
-					<h2>Demo: Test Suite running in Travis/Circle, including a11y tests</h2></aside>
-				</section>
+				</section> -->
 
 				<section>
 					<div class="left-align">
@@ -1875,10 +1963,6 @@ describe('dialog', () => {
 					</ul>
 				</section>
 
-				<section data-background-image="img/axe-webdriverjs-pr-checks.jpg" data-background-position="center top" data-background-size="contain">
-					<h2 class="offscreen">axe-webdriverjs on Github: Travis CI checks along with license/CLA and security/snyk</h2>
-				</section>
-
 				<section>
 					<h2 class="fancy h1-style">Hosted CI in a Nutshell 🌰</h2>
 					<ul class="larger">
@@ -1887,6 +1971,10 @@ describe('dialog', () => {
 						<li>Enable CI builds for the project</li>
 						<li>Push code</li>
 					</ul>
+				</section>
+
+				<section data-background-image="img/axe-core-circle.png" data-background-position="center top" data-background-size="contain">
+					<h2 class="offscreen">axe-core on Github: Circle CI checks along with license/CLA and security/snyk</h2>
 				</section>
 
 				<section>
@@ -2074,7 +2162,7 @@ Aborted due to warnings.
 				<section>
 					<h2 class="fancy">Tracking who broke the build</h2>
 					<figure>
-						<figcaption><a href="https://twitter.com/zqxwzq/status/855354405490741249">https://twitter.com/zqxwzq/status/855354405490741249</a></figcaption>
+						<figcaption><a href="https://twitter.com/zqxwzq/status/868039653697482753">https://twitter.com/zqxwzq/status/868039653697482753</a></figcaption>
 						<img data-src="img/ci-bandits.jpg" alt="A TV monitor with broken build bandits wanted for bounty">
 					</figure>
 				</section>
@@ -2099,16 +2187,20 @@ Aborted due to warnings.
 						<li>We can automate 30-50% of a11y issues.</li>
 						<li>Write a mix of unit &amp; integration tests.</li>
 						<li>Expand platform coverage with CI.</li>
-						<li>Watch out for gotchas!</li>
-						<li>Don’t forget manual a11y testing.</li>
+						<li>Beware of gotchas with chasing down errors!</li>
+						<li>Don’t forget usability and manual a11y testing.</li>
 					</ul>
 				</section>
 
 				<section data-background-color="#ffffff">
-					<h2 class="fancy">Thanks!</h2>
-					<h3 class="subhead"><a href="http://twitter.com/marcysutton">twitter.com/marcysutton</a></h3>
-					<h3 class="subhead"><a href="http://github.com/marcysutton">github.com/marcysutton</a></h3>
-					<img data-src="img/deque_logo_600p.jpg" alt="" style="width: 320px;">
+					<h2 class="h1-style fancy">Thanks!</h2>
+					<div class="thankYouScreen">
+						<ul>
+	            <li><img data-src="img/TwitterLogo_blue.svg" alt="Twitter" class="plain"><a href="https://twitter.com/marcysutton">twitter.com/marcysutton</a></li>
+	            <li><img data-src="img/github-logomark.svg" alt="Github" class="plain"><a href="https://github.com/marcysutton">github.com/marcysutton</a></li>
+	          </ul>
+						<img style="margin-top: 1em;" data-src="img/deque_logo_600p.jpg" alt="Deque" class="plain">
+					</div>
 				</section>
 			</div>
 			<footer>

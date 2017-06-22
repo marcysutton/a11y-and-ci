@@ -180,6 +180,11 @@
       color: $dequeBgColor;
     }
   }
+  .border-top {
+    border-style: solid;
+    border-top-width: 2px;
+    color: $dequeBgColor;
+  }
   .strike {
     text-decoration: line-through;
   }
@@ -302,6 +307,9 @@
       border-bottom: 0;
       padding-bottom: 1em;
     }
+    .group-end:last-of-type td {
+      padding-top: 1.25em;
+    }
   }
   figure.image-with-caption {
     img {
@@ -369,6 +377,32 @@
   }
   [aria-hidden="true"] {
     color: $mutedColor;
+  }
+}
+.reveal .thankYouScreen {
+  ul {
+    list-style: none;
+    margin: 0;
+
+    li {
+      margin-top: 0.75em;
+
+      img {
+        display: inline-block;
+        height: 1.5em;
+        margin: 0 20px -20px 0;
+        width: 1.5em;
+      }
+      a {
+        color: $dequeLogoColor;
+        text-decoration: underline;
+      }
+    }
+  }
+  &> img {
+    display: block;
+    margin: 0 auto;
+    width: 320px;
   }
 }
 .reveal li .twoThirdsCol {
@@ -506,7 +540,8 @@
 }
 .reveal {
   .logos {
-    margin-left: 0;
+    margin: 0 auto;
+    max-width: 1440px;
     text-align: center;
 
     li {
@@ -648,13 +683,19 @@
 }
 
 #oh-hai-images {
+  box-sizing: border-box;
   display: inline-block;
   margin-top: 0em;
   text-align: center;
 
   img, div {
+    box-sizing: border-box;
     // display: inline-block;
     vertical-align: middle;
+  }
+  &> img {
+    margin-left: 0.5em;
+    margin-right: 0.5em;
   }
   div {
     // max-width: 320px;
@@ -662,19 +703,24 @@
     margin: 10px 0 0;
     text-align: center;
   }
-  .angular {
-    max-width: 300px;
-  }
   .axe {
     background-color: #fff;
     // padding: 10px;
-    width: 400px;
+    width: 500px;
   }
-  .gdi {
-    max-width: 250px;
+  .a11ySea {
+    border-radius: 50%;
+    max-width: 28%;
+  }
+  .gdi,
+  .egghead {
+    max-width: 28%;
   }
   .slack {
     max-width: 320px;
+  }
+  .angular {
+    max-width: 300px;
   }
 }
 .has-footer .reveal footer {
