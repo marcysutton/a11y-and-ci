@@ -546,7 +546,7 @@ describe('dialog', () => {
       let options = {};
 
       axe.run('.some-element-selector', options, function (error, results) {
-        expect(result.violations.length).toBe(0);
+        expect(results.violations.length).toBe(0);
         done();
       });
     });
